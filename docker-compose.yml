@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+
+  # Pasos antes del build
+  # 1. Descomentar solo el target que se va a utilizar.
+  # 2. Si se usa una imagen CPU comentar deploy con anidados.
+
+  tensorflow:
+    container_name: tensorflow_tesis
+    build:
+      context: .
+      target: GPU
+      #target: GPU-Jupyter
+      #target: CPU
+      #target: CPU-Jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - "./app:/app"
+
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t\
+
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      #- /dev/video0:/dev/video0
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [ gpu ]
