@@ -35,7 +35,7 @@
 		},
 		"material-icon-theme.files.associations": {
 			"requirements.docker.txt": "Python-misc",
-			"requirements.env.txt": "Python-misc",
-		},
+			"requirements.env.txt": "Python-misc"
+		}
 	}
 }
