@@ -1,0 +1,10 @@
+{
+    "name": "frontend",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "frontend",
+    "workspaceFolder": "/frontend/src",
+    "shutdownAction": "none", // StopCompose para el servicio front-end al cerrar el editor de texto.
+    "extensions": []
+}

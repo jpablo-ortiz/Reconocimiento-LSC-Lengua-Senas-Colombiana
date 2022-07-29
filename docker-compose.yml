@@ -6,10 +6,10 @@ services:
   # 1. Descomentar solo el target que se va a utilizar.
   # 2. Si se usa una imagen CPU comentar deploy con anidados.
 
-  tensorflow:
-    container_name: tensorflow_tesis
+  backend:
+    container_name: backend-tesis
     build:
-      context: ./back-end
+      context: ./backend
       target: GPU
       #target: CPU
       #target: GPU-Jupyter
@@ -17,10 +17,10 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - ./back-end/app/src:/src
+      - ./backend/app/src:/src
 
     stdin_open: true # docker run -i
-    tty: true        # docker run -t\
+    tty: true # docker run -t\
 
     devices:
       - /dev/bus/usb:/dev/bus/usb
@@ -32,23 +32,22 @@ services:
           devices:
             - capabilities: [ gpu ]
 
-  angular:
-    container_name: angular_tesis
+  frontend:
+    container_name: frontend-tesis
     build:
-      context: ./front-end
+      context: ./frontend
     ports:
       - 4200:4200
       - 49153:49153
       - 9876:9876
       - 49154:49154
     volumes:
-    - ./front-end:/app
+      - ./frontend:/app
 
-
-  mongo-db:
-    container_name: mongodb_tesis
+  mongodb:
+    container_name: mongodb-tesis
     image: mongo:5.0.9
-    restart: always    
+    restart: always
     ports:
       - 27017:27017
     volumes:
@@ -56,12 +55,13 @@ services:
     #env_file:
     #  - ./envs/.mongo-db
 
-  mongo-express: # Mongo-Express es una herramienta gráfica de administración de clientes web MongoDB.
-    container_name: mongo-express_tesis
+  mongo-express:
+    # Mongo-Express es una herramienta gráfica de administración de clientes web MongoDB.
+    container_name: mongo-express-tesis
     image: mongo-express:0.54.0
     restart: always
     depends_on:
-      - mongo-db
+      - mongodb
     ports:
       - 8081:8081
     #env_file:

@@ -11,7 +11,7 @@
 
 FROM tensorflow/tensorflow:latest-gpu-jupyter as GPU-Jupyter
 
-COPY ./requirements.docker.txt .
+COPY ./app/requirements.docker.txt .
 RUN pip install --no-cache-dir -r requirements.docker.txt
 
 #COPY ./app/Sign-Language/requirements_gpu.txt .
@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir -r requirements.docker.txt
 
 FROM tensorflow/tensorflow:latest-gpu as GPU
 
-COPY ./requirements.docker.txt .
+COPY ./app/requirements.docker.txt .
 RUN pip install --no-cache-dir -r requirements.docker.txt
 
 #COPY ./app/Sign-Language/requirements_gpu.txt .
@@ -37,7 +37,7 @@ RUN pip install --no-cache-dir -r requirements.docker.txt
 
 FROM tensorflow/tensorflow:latest-jupyter as CPU-Jupyter
 
-COPY ./requirements.docker.txt .
+COPY ./app/requirements.docker.txt .
 RUN pip install --no-cache-dir -r requirements.docker.txt
 
 #COPY ./app/Sign-Language/requirements_cpu.txt .
@@ -50,7 +50,7 @@ RUN pip install --no-cache-dir -r requirements.docker.txt
 
 FROM tensorflow/tensorflow:latest as CPU
 
-COPY ./requirements.docker.txt .
+COPY ./app/requirements.docker.txt .
 RUN pip install --no-cache-dir -r requirements.docker.txt
 
 #COPY ./app/Sign-Language/requirements_cpu.txt .

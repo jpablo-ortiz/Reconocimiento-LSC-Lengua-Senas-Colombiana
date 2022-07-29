@@ -1,0 +1,10 @@
+{
+    "name": "backend",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "backend",
+    "workspaceFolder": "/backend/app/src",
+    "shutdownAction": "none", // StopCompose para el servicio back-end al cerrar el editor de texto.
+    "extensions": []
+}
