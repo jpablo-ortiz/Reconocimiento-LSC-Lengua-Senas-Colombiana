@@ -15,7 +15,7 @@ Aplicación y uso muy sencillos. 😇
 Cree y ejecute su docker-compose con el siguiente comando:
 
 ```bash
-docker-compose -f docker-compose.yml up
+docker compose -f docker-compose.yml up
 # Para ejecutar en background agregar el comando -d al final
 ```
 

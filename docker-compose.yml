@@ -9,7 +9,7 @@ services:
   tensorflow:
     container_name: tensorflow_tesis
     build:
-      context: .
+      context: ./back-end
       target: GPU
       #target: CPU
       #target: GPU-Jupyter
@@ -34,18 +34,20 @@ services:
 
   angular:
     container_name: angular_tesis
-    build: .
+    build:
+      context: ./front-end
     ports:
       - 4200:4200
       - 49153:49153
       - 9876:9876
       - 49154:49154
     volumes:
-    - ./front-end:/usr/src/app
+    - ./front-end:/app
+
 
   mongo-db:
     container_name: mongodb_tesis
-    image: mongo:5.0.3
+    image: mongo:5.0.9
     restart: always    
     ports:
       - 27017:27017
@@ -53,8 +55,6 @@ services:
       - ./.dbdata:/data/db
     #env_file:
     #  - ./envs/.mongo-db
-    networks:
-      - backend-network
 
   mongo-express: # Mongo-Express es una herramienta gráfica de administración de clientes web MongoDB.
     container_name: mongo-express_tesis
@@ -64,7 +64,5 @@ services:
       - mongo-db
     ports:
       - 8081:8081
-    env_file:
-      - ./envs/.mongo-express
-    networks:
-      - backend-network
+    #env_file:
+    #  - ./envs/.mongo-express

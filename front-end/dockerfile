@@ -1,21 +1,19 @@
-# Dockerfile
-FROM node:18.7.0-alpine3.16
+# Primera Etapa
+FROM node:18.7.0-alpine as build-step
 
-# Agregamos un usuario
-RUN useradd --user-group --create-home --shell /bin/false app
+RUN mkdir -p /app
+WORKDIR /app
 
-ENV HOME=/usr/src/app
-RUN mkdir $HOME
-WORKDIR $HOME
+COPY package.json /app
 
-# Instalamos angular cli en nuestra imágen
-RUN npm install -g @angular/cli && npm cache clean
+RUN npm install 
+#&& npm cache clean
 
-# Puerto entorno dev
-EXPOSE 4200
-# Puerto livereload
-EXPOSE 49153
-# Puerto Test
-EXPOSE 9876
-# Puerto e2e
-EXPOSE 49152 
+#COPY . /app
+
+#RUN npm run build --prod
+
+# Segunda Etapa
+#FROM nginx:1.17.1-alpine as web-server
+
+#COPY --from=build-step /app/dist /usr/share/nginx/html

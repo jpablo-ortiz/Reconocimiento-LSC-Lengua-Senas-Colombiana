@@ -14,8 +14,8 @@ FROM tensorflow/tensorflow:latest-gpu-jupyter as GPU-Jupyter
 COPY ./requirements.docker.txt .
 RUN pip install --no-cache-dir -r requirements.docker.txt
 
-COPY ./app/Sign-Language/requirements_gpu.txt .
-RUN pip install --no-cache-dir -r requirements_gpu.txt
+#COPY ./app/Sign-Language/requirements_gpu.txt .
+#RUN pip install --no-cache-dir -r requirements_gpu.txt
 
 #RUN apt-get update
 #RUN apt install -y libgl1-mesa-glx
@@ -27,8 +27,8 @@ FROM tensorflow/tensorflow:latest-gpu as GPU
 COPY ./requirements.docker.txt .
 RUN pip install --no-cache-dir -r requirements.docker.txt
 
-COPY ./app/Sign-Language/requirements_gpu.txt .
-RUN pip install --no-cache-dir -r requirements_gpu.txt
+#COPY ./app/Sign-Language/requirements_gpu.txt .
+#RUN pip install --no-cache-dir -r requirements_gpu.txt
 
 #RUN apt-get update
 #RUN apt install -y libgl1-mesa-glx
@@ -40,8 +40,8 @@ FROM tensorflow/tensorflow:latest-jupyter as CPU-Jupyter
 COPY ./requirements.docker.txt .
 RUN pip install --no-cache-dir -r requirements.docker.txt
 
-COPY ./app/Sign-Language/requirements_cpu.txt .
-RUN pip install --no-cache-dir -r requirements_cpu.txt
+#COPY ./app/Sign-Language/requirements_cpu.txt .
+#RUN pip install --no-cache-dir -r requirements_cpu.txt
 
 #RUN apt-get update
 #RUN apt install -y libgl1-mesa-glx
@@ -53,8 +53,8 @@ FROM tensorflow/tensorflow:latest as CPU
 COPY ./requirements.docker.txt .
 RUN pip install --no-cache-dir -r requirements.docker.txt
 
-COPY ./app/Sign-Language/requirements_cpu.txt .
-RUN pip install --no-cache-dir -r requirements_cpu.txt
+#COPY ./app/Sign-Language/requirements_cpu.txt .
+#RUN pip install --no-cache-dir -r requirements_cpu.txt
 
 #RUN apt-get update
 #RUN apt install -y libgl1-mesa-glx
