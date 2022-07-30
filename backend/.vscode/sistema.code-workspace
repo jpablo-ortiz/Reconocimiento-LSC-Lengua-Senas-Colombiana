@@ -24,7 +24,10 @@
 		]
 	},
 	"settings": {
-		"python.defaultInterpreterPath": "../env/bin/python",
+		// linux - macOS env
+		//"python.defaultInterpreterPath": "./env/bin/python",
+		// windows env
+		"python.defaultInterpreterPath": "./env/Scripts/python.exe",
 		"workbench.editorAssociations": {
 			"*.svg": "hediet.vscode-drawio-text"
 		},
