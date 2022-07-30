@@ -1,0 +1,3 @@
+- Trained and serialized models, model predictions, or model summaries.
+
+Usamos un script `src\models` para el entrenamiento de nuestro modelo de aprendizaje automático. Es posible que necesitemos restaurar o reutilizar el modelo con otros modelos para construir un conjunto o comparar y podemos decidir sobre un modelo que queremos implementar. Para hacer esto, guardamos el modelo entrenado en un archivo (generalmente un formato pickle) y ese archivo se guardaría en este directorio.
