@@ -44,8 +44,6 @@
 		"editor.inlineSuggest.enabled": true,
 		"editor.renderWhitespace": "none",
 		"editor.bracketPairColorization.enabled": true,
-		"workbench.iconTheme": "material-icon-theme",
-		"workbench.colorTheme": "Halcyon"
 	},
 	"extensions": {
 		// For more information, visit: https://go.microsoft.com/fwlink/?linkid=827846

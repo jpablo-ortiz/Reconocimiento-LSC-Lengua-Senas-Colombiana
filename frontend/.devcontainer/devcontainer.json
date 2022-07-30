@@ -3,7 +3,7 @@
 
     "name": "frontend",
     "dockerComposeFile": [
-        "../docker-compose.yml"
+        "../../docker-compose.yml"
     ],
     "service": "frontend",
     "workspaceFolder": "/app",
@@ -20,19 +20,10 @@
             "requirements.docker.txt": "Python-misc",
             "requirements.env.txt": "Python-misc"
         },
-        "conventionalCommits.scopes": [
-            "front",
-            "back",
-            "neuronal-network",
-            "database",
-            "docker"
-        ],
         // Style
         "editor.inlineSuggest.enabled": true,
         "editor.renderWhitespace": "none",
-        "editor.bracketPairColorization.enabled": true,
-        "workbench.iconTheme": "material-icon-theme",
-        "workbench.colorTheme": "Halcyon"
+        "editor.bracketPairColorization.enabled": true
     },
     "extensions": [
         // Necesarias
@@ -40,12 +31,6 @@
         // Otros
         "wraith13.zoombar-vscode",
         "lkytal.pomodoro",
-        "PKief.material-icon-theme",
-        "brittanychiang.halcyon-vscode",
-        "eamodio.gitlens",
-        "GitHub.copilot-nightly",
-        "donjayamanne.githistory",
-        "hediet.vscode-drawio",
-        "vivaxy.vscode-conventional-commits"
+        "hediet.vscode-drawio"
     ]
 }
