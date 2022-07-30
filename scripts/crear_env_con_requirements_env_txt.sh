@@ -1,1 +1,0 @@
-(virtualenv ./env || venv ./env) && source ./env/bin/activate && pip install -r ./requirements.env.txt

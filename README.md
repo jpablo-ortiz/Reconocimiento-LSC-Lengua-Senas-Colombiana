@@ -1,12 +1,16 @@
-# Aclaraciones
+# Inicializando entorno
+## Aclaraciones
 
 En este repositorio existen dos sistemas para la compilación del código:
 - Docker - Image Tensorflow:
     - Este sistema se debe usar en su mayoría para todos los procesos para la IA, entrenamiento, datos, etc.
 - Env python:
-    - Solo usar en caso de problemas o conflictos. Ej: No se detecta las cámaras del pc en OpenCV.
+    - Solo usar en caso de problemas o conflictos. Ej: No se detecta las cámaras del pc con OpenCV en Docker.
 
-# Docker
+## Docker
+<details>
+    <summary>Scripts y comandos para usar docker</summary>
+    <br>
 
 ## Uso 🖥️
 
@@ -34,11 +38,15 @@ Si por alguna razón al ejecutar la aplicación obtiene ciertos errores o compli
 docker-compose -f docker-compose.yml build
 ```
 
+</details>
+<br>
 
-# Env Python
+## Env Python
+
 <details>
-<summary style="cursor: pointer; size: 100px;">
-Scripts y comandos para usar env de python</summary>
+    <summary style="cursor: pointer; size: 100px;">Scripts y comandos para usar env python</summary>
+    <br>
+
 ## Script para generar entorno de python aislado (env) con paquetes necesarios
 
 Para windows - powershell ejecutar en la terminal:
@@ -82,3 +90,6 @@ Para linux - bash ejecutar en la terminal:
 
 <!-- Espacio en blanco -->
 <br>
+
+---
+

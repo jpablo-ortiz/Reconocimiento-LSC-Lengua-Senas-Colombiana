@@ -1,0 +1,63 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"launch": {
+		"configurations": [
+			{
+				"name": "Python: FastAPI",
+				"type": "python",
+				"request": "launch",
+				"module": "uvicorn",
+				"cwd": "${workspaceFolder}/src",
+				"args": [
+					"interfaz:app",
+					"--reload",
+					"--port",
+					"8000",
+				],
+				"jinja": true,
+				"justMyCode": true,
+			}
+		]
+	},
+	"settings": {
+		"python.defaultInterpreterPath": "../env/bin/python",
+		"workbench.editorAssociations": {
+			"*.svg": "hediet.vscode-drawio-text"
+		},
+		"explorer.excludeGitIgnore": true,
+		"material-icon-theme.files.associations": {
+			"requirements.docker.txt": "Python-misc",
+			"requirements.env.txt": "Python-misc",
+		},
+		"conventionalCommits.scopes": [
+			"front",
+			"back",
+			"neuronal-network",
+			"database",
+			"docker"
+		],
+		// Style
+		"editor.inlineSuggest.enabled": true,
+		"editor.renderWhitespace": "none",
+		"editor.bracketPairColorization.enabled": true,
+		"workbench.iconTheme": "material-icon-theme",
+		"workbench.colorTheme": "Halcyon"
+	},
+	"extensions": {
+		"recommendations": [
+			"donjayamanne.python-environment-manager",
+			"ms-python.python",
+			"ms-python.vscode-pylance",
+			"PKief.material-icon-theme",
+			"ms-toolsai.jupyter",
+			"ms-toolsai.jupyter-renderers",
+			"ms-toolsai.jupyter-keymap",
+			"changkaiyan.tf2snippets",
+			"devil-cyber.keras-snippet"
+		]
+	}
+}

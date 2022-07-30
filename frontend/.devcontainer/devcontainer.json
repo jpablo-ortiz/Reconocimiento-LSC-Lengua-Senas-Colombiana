@@ -1,0 +1,51 @@
+{
+    // Docker Container Configuration
+
+    "name": "frontend",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "frontend",
+    "workspaceFolder": "/app",
+    "shutdownAction": "none", // StopCompose para el servicio front-end al cerrar el editor de texto.
+
+    // Others Configuration
+
+    "settings": {
+        "workbench.editorAssociations": {
+            "*.svg": "hediet.vscode-drawio-text"
+        },
+        "explorer.excludeGitIgnore": true,
+        "material-icon-theme.files.associations": {
+            "requirements.docker.txt": "Python-misc",
+            "requirements.env.txt": "Python-misc"
+        },
+        "conventionalCommits.scopes": [
+            "front",
+            "back",
+            "neuronal-network",
+            "database",
+            "docker"
+        ],
+        // Style
+        "editor.inlineSuggest.enabled": true,
+        "editor.renderWhitespace": "none",
+        "editor.bracketPairColorization.enabled": true,
+        "workbench.iconTheme": "material-icon-theme",
+        "workbench.colorTheme": "Halcyon"
+    },
+    "extensions": [
+        // Necesarias
+        "angular.ng-template",
+        // Otros
+        "wraith13.zoombar-vscode",
+        "lkytal.pomodoro",
+        "PKief.material-icon-theme",
+        "brittanychiang.halcyon-vscode",
+        "eamodio.gitlens",
+        "GitHub.copilot-nightly",
+        "donjayamanne.githistory",
+        "hediet.vscode-drawio",
+        "vivaxy.vscode-conventional-commits"
+    ]
+}

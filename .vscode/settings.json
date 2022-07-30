@@ -1,5 +1,9 @@
 {
     "conventionalCommits.scopes": [
-        "front"
+        "front",
+        "back",
+        "neuronal-network",
+        "database",
+        "docker"
     ]
 }
