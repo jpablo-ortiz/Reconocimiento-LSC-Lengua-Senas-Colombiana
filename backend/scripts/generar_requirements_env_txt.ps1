@@ -1,4 +1,4 @@
-. .env/Scripts/activate
+. ./backend/env/Scripts/activate
 if($?){
-    pip freeze > requirements.env.txt
+    pip freeze > ./backend/requirements.env.txt
 }

@@ -1,15 +1,15 @@
 pip install virtualenv
-python3 -m virtualenv env
+python3 -m virtualenv ./backend/env
 if(! $?) { 
-    virtualenv env #-p python3.8
+    virtualenv ./backend/env #-p python3.8
     if(! $?) { 
-        venv env #-p python3.8
+        venv ./backend/env #-p python3.8
     }
 }
 
 if($?){
-    . env/Scripts/activate
+    . ./backend/env/Scripts/activate
     if($?) {
-        pip install -r requirements.env.txt
+        pip install -r ./backend/requirements.env.txt
     }
 }

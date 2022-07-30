@@ -1,2 +1,2 @@
-source ./.env/bin/activate && 
-pip freeze > ./requirements.env.txt
+source ./backend/env/bin/activate && 
+pip freeze > ./backend/requirements.env.txt

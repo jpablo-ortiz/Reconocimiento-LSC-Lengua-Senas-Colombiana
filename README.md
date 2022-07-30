@@ -1,11 +1,11 @@
 # Inicializando entorno
 ## Aclaraciones
-
-En este repositorio existen dos sistemas para la compilación del código:
-- Docker - Image Tensorflow:
-    - Este sistema se debe usar en su mayoría para todos los procesos para la IA, entrenamiento, datos, etc.
-- Env python:
-    - Solo usar en caso de problemas o conflictos. Ej: No se detecta las cámaras del pc con OpenCV en Docker.
+1. Siempre ejecutar los comandos dados desde la raíz del proyecto.
+2. Para el backend existen dos sistemas para la compilación del código:
+    - Docker - Image Tensorflow:
+        - Este sistema se debe usar en su mayoría para todos los procesos para la IA, entrenamiento, datos, etc.
+    - Env python:
+        - Solo usar en caso de problemas o conflictos. Ej: No se detecta las cámaras del pc con OpenCV en Docker.
 
 ## Docker
 <details>
@@ -52,26 +52,26 @@ docker-compose -f docker-compose.yml build
 Para windows - powershell ejecutar en la terminal:
 
 ```powershell
-./scripts/crear_env_con_requirements_env_txt.ps1
+./backend/scripts/crear_env_con_requirements_env_txt.ps1
 ```
 Para linux - bash ejecutar en la terminal:
 
 ```bash
-./scripts/crear_env_con_requirements_env_txt.sh
+./backend/scripts/crear_env_con_requirements_env_txt.sh
 ```
 
-## Script para activar 
+## Script para activar en terminal el entorno de python aislado (env)
 
 Para windows - powershell ejecutar en la terminal:
 
 ```powershell
-. ./env/Scripts/activate
+. ./backend/env/Scripts/activate
 ```
 
 Para linux - bash ejecutar en la terminal:
 
 ```bash
-. ./env/bin/activate
+. ./backend/env/bin/activate
 ```
 
 ## Script para generar requirements.env.txt con los paquetes usados en el env
@@ -79,12 +79,12 @@ Para linux - bash ejecutar en la terminal:
 Para windows - powershell ejecutar en la terminal:
 
 ```powershell
-./scripts/generar_requirements_env_txt.ps1
+./backend/scripts/generar_requirements_env_txt.ps1
 ```
 Para linux - bash ejecutar en la terminal:
 
 ```bash
-./scripts/generar_requirements_env_txt.sh
+./backend/scripts/generar_requirements_env_txt.sh
 ```
 </details>
 
