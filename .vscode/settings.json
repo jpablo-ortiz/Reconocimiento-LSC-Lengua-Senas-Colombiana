@@ -1,9 +1,11 @@
 {
+    "conventionalCommits.autoCommit": false,
     "conventionalCommits.scopes": [
         "front",
         "back",
         "neuronal-network",
         "database",
-        "docker"
+        "docker",
+        "config"
     ]
 }
