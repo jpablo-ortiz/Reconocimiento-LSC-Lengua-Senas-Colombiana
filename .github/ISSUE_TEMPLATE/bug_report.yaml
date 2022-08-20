@@ -1,0 +1,45 @@
+name: Reportar Bug
+description: Presentar un informe de un error.
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - jpablo-ortiz
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por tomarse el tiempo para completar este informe del Bug!
+  - type: input
+    id: contact
+    attributes:
+      label: Detalles de contacto
+      description: ¿Cómo podemos ponernos en contacto contigo si necesitamos más información?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: ¿Qué Bug se encontró?
+      description: Describe el Bug aquí.
+      placeholder: ¡Cuéntanos sobre el bug!
+    validations:
+      required: true
+  - type: dropdown
+    id: operating-systems
+    attributes:
+      label: ¿En qué tipo de sistema operativo está viendo el problema?
+      multiple: true
+      options:
+        - Linux
+        - Windows
+        - Mac
+        - Otro
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: ¿Cómo reproducir el Bug?
+      description: Describe cómo reproducir el Bug aquí.
+      render: shell
