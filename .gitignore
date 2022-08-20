@@ -1,5 +1,4 @@
-.envs
-envs
+node_modules
 .env
 env
 .Ayudas
