@@ -1,0 +1,17 @@
+name: Nueva Feature
+description: Nueva feature para el proyecto
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Asegúrese de incluir tantos detalles y recursos como sea posible!
+  - type: textarea
+    id: Feature
+    attributes:
+      label: Feature
+      description: Describa la(s) Feature(s).
+      placeholder: Requerimiento 1 - Ejemplo
+    validations:
+      required: true
