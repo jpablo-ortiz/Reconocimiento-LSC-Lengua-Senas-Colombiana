@@ -209,3 +209,59 @@ class SignDataset(SignDatasetAbstract):
             image = image / 255.0
         return image
 
+
+class SignDatasetImageDatasetFromDirectory(SignDatasetAbstract):
+    def __init__(self, path='../../data/raw/Señas', img_height=256, img_width=256, batch_size=32,
+                 shuffle=True, random_seed=None, optimizers=True, normalize_images=True, grayscale=False,
+                 use_cache=True, cache_dir='', crop_to_aspect_ratio=False):
+        super().__init__(path, img_height, img_width, batch_size, shuffle, random_seed,
+                         optimizers, normalize_images, grayscale, use_cache, cache_dir)
+
+        self.crop_to_aspect_ratio = crop_to_aspect_ratio
+
+        self.classes = None
+        self.steps_per_epoch = None
+
+    def get_dataset(self) -> tf.data.Dataset:
+        dataset = tf.keras.utils.image_dataset_from_directory(
+            self.path,
+            labels='inferred',
+            label_mode='categorical',
+            color_mode='grayscale' if self.grayscale else 'rgb',
+            batch_size=self.batch_size if self.optimizers else None,
+            image_size=(self.img_height, self.img_width),
+            shuffle=self.shuffle,  # reshuffle_each_iteration=False compared with other techniques
+            seed=self.random_seed,
+            interpolation='bilinear',
+            crop_to_aspect_ratio=self.crop_to_aspect_ratio,
+        )
+
+        if self.normalize_images:
+            dataset = SignDatasetAbstract.normalize_image(dataset)
+
+        if self.optimizers:
+            # Perform shuffle, batch, repeat and prefetch
+            dataset = self._configure_for_performance(dataset)
+
+        self.dataset = dataset
+        return self.dataset
+
+    def get_classes(self) -> list:
+        if self.classes is None:
+            self.classes = self.dataset.class_names
+        return self.classes
+
+    # -------------------------------------------------------------------------------
+    # Auxiliar methods
+    # -------------------------------------------------------------------------------
+
+    def _configure_for_performance(self, dataset: tf.data.Dataset):
+        # Configure options for the dataset
+        if self.shuffle:
+            dataset = dataset.shuffle(buffer_size=1000, reshuffle_each_iteration=True)
+
+        # Configure extra options to improve the performance
+        dataset = super()._configure_for_performance(dataset)
+
+        return dataset
+
