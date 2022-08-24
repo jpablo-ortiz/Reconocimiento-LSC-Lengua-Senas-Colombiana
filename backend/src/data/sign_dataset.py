@@ -6,6 +6,10 @@ from glob import glob
 
 import tensorflow as tf
 
+# TODO: Test the use of a external ImageDataGenerator.
+#    - Test with saving the images of the data augmentation on disk.
+#    - Test without saving the images of the data augmentation.
+
 # Different types of datasets pipelines of sign images
 # - SignDataset() -> tf.data.Dataset
 #   - tf.data.Dataset.from_tensor_slices (with direct io)
@@ -86,7 +90,7 @@ class SignDatasetAbstract(metaclass=ABCMeta):
         def normalization(image, label):
             return image / 255.0, label
         return dataset.map(normalization, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-    
+
 
 # ===========================================================
 # Class for sign datasets inherited from SignDatasetAbstract
@@ -265,3 +269,69 @@ class SignDatasetImageDatasetFromDirectory(SignDatasetAbstract):
 
         return dataset
 
+
+class SignDatasetImageDataGenerator(SignDatasetAbstract):
+    def __init__(self, path='../../data/raw/Señas', img_height=256, img_width=256, batch_size=32,
+                 shuffle=True, random_seed=None, optimizers=True, normalize_images=True, grayscale=False,
+                 crop_to_aspect_ratio=False, data_aug_save_dir=None, data_aug_save_prefix='',
+                 use_cache=True, cache_dir='', data_aug_save_format='jpg',
+                 image_data_generator: tf.keras.preprocessing.image.ImageDataGenerator = None):
+        super().__init__(path, img_height, img_width, batch_size, shuffle, random_seed,
+                         optimizers, normalize_images, grayscale, use_cache, cache_dir)
+
+        self.crop_to_aspect_ratio = crop_to_aspect_ratio
+        self.data_aug_save_dir = data_aug_save_dir
+        self.data_aug_save_prefix = data_aug_save_prefix
+        self.data_aug_save_format = data_aug_save_format
+
+        if image_data_generator is None:
+            self.image_data_generator = tf.keras.preprocessing.image.ImageDataGenerator()
+        else:
+            self.image_data_generator = image_data_generator
+
+        self.dataset = None
+        self.classes = None
+        self.steps_per_epoch = None
+
+    def get_dataset(self) -> tf.data.Dataset:
+        if self.normalize_images:
+            self.image_data_generator.rescale = 1./255
+
+        dataset = self.image_data_generator.flow_from_directory(
+            self.path,
+            classes=None,
+            class_mode='categorical',
+            color_mode='grayscale' if self.grayscale else 'rgb',
+            batch_size=self.batch_size if self.optimizers else None,
+            target_size=(self.img_height, self.img_width),
+            shuffle=self.shuffle,
+            seed=self.random_seed,
+            interpolation='nearest',
+            keep_aspect_ratio=self.crop_to_aspect_ratio,
+            save_to_dir=self.data_aug_save_dir,
+            save_prefix=self.data_aug_save_prefix,
+            save_format=self.data_aug_save_format,
+        )
+
+        if self.optimizers:
+            # Perform shuffle, batch, repeat and prefetch
+            dataset = self._configure_for_performance(dataset)
+
+        self.dataset = dataset
+        return self.dataset
+
+    def get_classes(self) -> list:
+        if self.classes is None:
+            self.classes = self.dataset.class_names
+        return self.classes
+
+    # -------------------------------------------------------------------------------
+    # Auxiliar methods
+    # -------------------------------------------------------------------------------
+
+    def _configure_for_performance(self, dataset: tf.data.Dataset):
+        # Configure options for the dataset
+        if self.shuffle:
+            dataset = dataset.shuffle(buffer_size=1000, reshuffle_each_iteration=True)
+
+        return dataset
