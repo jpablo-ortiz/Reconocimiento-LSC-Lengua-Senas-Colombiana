@@ -9,6 +9,10 @@
             "section": "Bug Fixes"
         },
         {
+            "type": "refactor",
+            "hidden": "Refactoring"
+        },
+        {
             "type": "chore",
             "hidden": true
         },
@@ -20,10 +24,7 @@
             "type": "style",
             "hidden": true
         },
-        {
-            "type": "refactor",
-            "hidden": true
-        },
+
         {
             "type": "perf",
             "hidden": "Performance"
