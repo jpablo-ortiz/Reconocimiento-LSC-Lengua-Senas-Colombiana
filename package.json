@@ -1,0 +1,31 @@
+{
+  "name": "reconocimiento-lsc-lengua-senas-colombiana",
+  "version": "1.1.0",
+  "description": "... TODO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "husky install",
+    "release": "standard-version",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "release:major": "standard-version --release-as major"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana/issues"
+  },
+  "homepage": "https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "husky": "^8.0.1",
+    "standard-version": "^9.5.0"
+  }
+}

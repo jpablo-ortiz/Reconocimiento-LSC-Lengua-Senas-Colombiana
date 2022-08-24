@@ -1,0 +1,16 @@
+# Primera Etapa
+FROM node:18.7.0-alpine3.15
+
+RUN mkdir -p /app
+WORKDIR /app
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY package*json .
+
+COPY . .
+
+RUN npm install
+RUN npm install -g @angular/cli
+
+CMD ng serve --host 0.0.0.0

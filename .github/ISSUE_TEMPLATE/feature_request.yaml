@@ -1,0 +1,17 @@
+name: Sugerir Feature
+description: Sugiera una feature/idea para el proyecto
+title: "[Feature Request / Suggestion]: "
+labels: ["help wanted", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Agradecemos sus comentarios sobre cómo mejorar este proyecto. ¡Asegúrese de incluir tantos detalles y recursos como sea posible!
+  - type: textarea
+    id: Suggestion
+    attributes:
+      label: Suggestion / Feature
+      description: Describa la(s) Feature(s) que le gustaría que se agregaran.
+      placeholder: Cuentanos tu sugerencia
+    validations:
+      required: true

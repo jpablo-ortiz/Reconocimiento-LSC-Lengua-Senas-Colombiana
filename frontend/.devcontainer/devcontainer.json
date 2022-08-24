@@ -1,0 +1,36 @@
+{
+    // Docker Container Configuration
+
+    "name": "frontend",
+    "dockerComposeFile": [
+        "../../docker-compose.yml"
+    ],
+    "service": "frontend",
+    "workspaceFolder": "/app",
+    "shutdownAction": "none", // StopCompose para el servicio front-end al cerrar el editor de texto.
+
+    // Others Configuration
+
+    "settings": {
+        "workbench.editorAssociations": {
+            "*.svg": "hediet.vscode-drawio-text"
+        },
+        "explorer.excludeGitIgnore": true,
+        "material-icon-theme.files.associations": {
+            "requirements.docker.txt": "Python-misc",
+            "requirements.env.txt": "Python-misc"
+        },
+        // Style
+        "editor.inlineSuggest.enabled": true,
+        "editor.renderWhitespace": "none",
+        "editor.bracketPairColorization.enabled": true
+    },
+    "extensions": [
+        // Necesarias
+        "angular.ng-template",
+        // Otros
+        "wraith13.zoombar-vscode",
+        "lkytal.pomodoro",
+        "hediet.vscode-drawio"
+    ]
+}

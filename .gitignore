@@ -1,1 +1,5 @@
-Ayudas/
+/node_modules
+.env
+env
+.Ayudas
+.dbdata

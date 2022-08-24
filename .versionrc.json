@@ -1,0 +1,43 @@
+{
+    "types": [
+        {
+            "type": "feat",
+            "section": "Features"
+        },
+        {
+            "type": "fix",
+            "section": "Bug Fixes"
+        },
+        {
+            "type": "refactor",
+            "hidden": "Refactoring"
+        },
+        {
+            "type": "chore",
+            "hidden": true
+        },
+        {
+            "type": "docs",
+            "hidden": true
+        },
+        {
+            "type": "style",
+            "hidden": true
+        },
+
+        {
+            "type": "perf",
+            "hidden": "Performance"
+        },
+        {
+            "type": "test",
+            "hidden": true
+        }
+    ],
+    "commitUrlFormat": "https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana/commit/{{hash}}",
+    "compareUrlFormat": "https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana/compare/{{previousTag}}...{{currentTag}}",
+    "issuePrefixes": [
+        "#"
+    ],
+    "issueUrlFormat": "https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana/issues/{{id}}"
+}
