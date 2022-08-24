@@ -87,3 +87,125 @@ class SignDatasetAbstract(metaclass=ABCMeta):
             return image / 255.0, label
         return dataset.map(normalization, num_parallel_calls=tf.data.experimental.AUTOTUNE)
     
+
+# ===========================================================
+# Class for sign datasets inherited from SignDatasetAbstract
+# ===========================================================
+
+
+class SignDataset(SignDatasetAbstract):
+    def __init__(self, path='../../data/raw/Señas', img_height=256, img_width=256, batch_size=32,
+                 shuffle=True, random_seed=None, optimizers=True, normalize_images=True, grayscale=False,
+                 use_cache=True, cache_dir='', fastest_version=True, resize_images=True):
+        super().__init__(path, img_height, img_width, batch_size, shuffle, random_seed,
+                         optimizers, normalize_images, grayscale, use_cache, cache_dir)
+
+        self.fastest_version = fastest_version
+        self.resize_images = resize_images
+
+        self.classes = None
+        self.steps_per_epoch = None
+
+    def get_dataset(self) -> tf.data.Dataset:
+        dataset = None
+
+        # Get the filename (with path) of each image
+        filenames = glob(self.path + '/*/*.jpg')
+        if self.shuffle:
+            self._shuffle_filenames(filenames)
+
+        # Process the dataset generator
+        if self.fastest_version:
+            dataset = self._get_dataset_from_tensor_slices_version(filenames)
+        else:
+            dataset = self._get_dataset_list_files_version(filenames)
+
+        if self.optimizers:
+            # Perform shuffle, batch, repeat and prefetch
+            dataset = self._configure_for_performance(dataset)
+
+        return dataset
+
+    # tf.data.Dataset.from_tensor_slices (with direct io)
+    def _get_dataset_from_tensor_slices_version(self, filenames):
+        # Get the respective label
+        classes = self.get_classes()
+        dict_classes = {_class: _label for _label, _class in classes}
+        labels = [dict_classes[filename.split('/')[-2]] for filename in filenames]
+
+        # Create a dataset of images (x) and labels (y) (y = a one_hot tensor) (from filenames and labels)
+        filenames_dataset = tf.data.Dataset.from_tensor_slices(filenames)
+        images_dataset = filenames_dataset.map(
+            self._decode_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        labels_dataset = tf.keras.utils.to_categorical(labels)  # To one hot vector
+        labels_dataset = tf.data.Dataset.from_tensor_slices(labels_dataset)
+        dataset = tf.data.Dataset.zip((images_dataset, labels_dataset))  # Zip the two datasets
+
+        return dataset
+
+    def _get_dataset_list_files_version(self, filenames):  # tf.data.Dataset.list_files
+        def get_label(file_path):
+            # Get classes from the folders names in the path
+            classes = self.get_classes()
+            classes = [_class for i, _class in classes]
+
+            # Divide the path into parts
+            part = tf.strings.split(file_path, os.path.sep)
+            part = part[-2]
+            one_hot = part == classes
+            # To one hot vector
+            to_number = tf.argmax(one_hot)
+            label = tf.one_hot(to_number, len(classes))
+            return label
+
+        def process_path(file_path):
+            label = y = get_label(file_path)
+            image = x = self._decode_image(file_path)
+            return x, y
+
+        # Create a dataset of images (x) and labels (y) (y = a one_hot tensor)
+        dataset = tf.data.Dataset.list_files(file_pattern=filenames, shuffle=self.shuffle)
+        dataset = dataset.map(process_path, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        return dataset
+
+    def get_classes(self):
+        if self.classes is None:
+            # Get the classes from the folders names in the path
+            classes = os.listdir(self.path)
+            # All folders that begin with '.' are ignored
+            classes = [_class for _class in classes if _class[0] != '.']
+            self.classes = [(_label, _class) for _label, _class in enumerate(classes)]
+        return self.classes
+
+    # -------------------------------------------------------------------------------
+    # Auxiliar methods
+    # -------------------------------------------------------------------------------
+
+    def _configure_for_performance(self, dataset: tf.data.Dataset):
+        # Configure options for the dataset
+        if self.shuffle:
+            dataset = dataset.shuffle(buffer_size=1000, reshuffle_each_iteration=True)
+        dataset = dataset.batch(self.batch_size)
+
+        # Configure extra options to improve the performance
+        dataset = super()._configure_for_performance(dataset)
+
+        return dataset
+
+    def _shuffle_filenames(self, filenames):
+        if self.random_seed is not None:
+            random.Random(self.random_seed).shuffle(filenames)
+        else:
+            random.shuffle(filenames)
+
+    def _decode_image(self, filename):
+        image = tf.io.read_file(filename)
+        image = tf.image.decode_jpeg(image, channels=3)
+        if self.grayscale:
+            image = tf.image.rgb_to_grayscale(image)
+        if self.resize_images:
+            image = tf.image.resize(image, [self.img_height, self.img_width])
+        if self.normalize_images:
+            image = image / 255.0
+        return image
+
