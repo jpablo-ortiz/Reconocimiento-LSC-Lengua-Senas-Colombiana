@@ -1,6 +1,7 @@
 {
     "folders": [
         {
+            //"path": "../src/Compartidos/proyecto"
             "path": ".."
         }
     ],
@@ -13,26 +14,38 @@
                 "module": "uvicorn",
                 "cwd": "${workspaceFolder}/src",
                 "args": [
-                    "interfaz:app",
+                    "main:app",
                     "--reload",
                     "--port",
-                    "8000",
+                    "8080",
                 ],
-                "jinja": true,
-                "justMyCode": true,
             }
         ]
     },
     "settings": {
-        "python.defaultInterpreterPath": "./env/bin/python",
+        // Python
+        "python.defaultInterpreterPath": "./env/Scripts/python.exe",
+        "python.analysis.typeCheckingMode": "off",
+        // Formatter and Linter
+        "python.formatting.provider": "black",
+        "editor.formatOnSave": true,
+        "python.formatting.blackArgs": [
+            "--line-length",
+            "110"
+        ],
+        // Designs on vscode
+        "explorer.excludeGitIgnore": true,
         "workbench.editorAssociations": {
-            "*.svg": "hediet.vscode-drawio-text"
+            "*.svg": "svgPreviewer.customEditor",
+            "*.ipynb": "jupyter-notebook",
+            "*.md": "vscode.markdown.preview.editor",
+            "*.pdf": "pdf.preview"
         },
-        "explorer.excludeGitIgnore": false,
         "material-icon-theme.files.associations": {
             "requirements.docker.txt": "Python-misc",
             "requirements.env.txt": "Python-misc",
         },
+        // GIT
         "conventionalCommits.scopes": [
             "front",
             "back",
@@ -40,9 +53,9 @@
             "database",
             "docker"
         ],
+        // Others
         "editor.inlineSuggest.enabled": true,
         "editor.renderWhitespace": "none",
-        "editor.bracketPairColorization.enabled": true,
     },
     "extensions": {
         "recommendations": [
