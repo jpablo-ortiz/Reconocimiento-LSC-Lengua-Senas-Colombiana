@@ -1,0 +1,4 @@
+# python ignores
+**/__pycache__/
+*.npy
+*.jpg
