@@ -49,7 +49,7 @@
         "conventionalCommits.scopes": [
             "front",
             "back",
-            "neuronal-network",
+            "nn",
             "database",
             "docker"
         ],
