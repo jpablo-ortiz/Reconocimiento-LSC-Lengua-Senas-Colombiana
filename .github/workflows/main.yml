@@ -19,4 +19,4 @@ jobs:
         uses: piotrpawlaczek/python-blacken@release/stable
         with:
           line-length: '110'
-          path: './backend/src'
+          path: '/backend/src'
