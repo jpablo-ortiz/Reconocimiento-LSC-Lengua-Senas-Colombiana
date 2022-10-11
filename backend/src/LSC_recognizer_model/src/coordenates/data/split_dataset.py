@@ -8,7 +8,7 @@ from unicodedata import normalize
 import cv2
 import numpy as np
 import tensorflow as tf
-from utils.holistic.detector_holistica import DetectorHolistica
+from utils.holistic.holistic_detector import HolisticDetector
 
 
 class SplitDataset:
@@ -37,8 +37,11 @@ class SplitDataset:
         save_path_image_detection_draw: str = "",
         image_single_aug=None,
         image_separated_aug=None,
-        cant_rotations_per_axie_data_aug=[0, 0, 0],
         execute_in_parallel=False,
+        cant_rotations_per_axie_data_aug=[0, 0, 0],
+        x_max_rotation=30,
+        y_max_rotation=45,
+        z_max_rotation=20,
     ):
         if image_separated_aug is None:
             image_separated_aug = []
@@ -54,7 +57,7 @@ class SplitDataset:
         count_image = 0
 
         # Create the object
-        holistica = DetectorHolistica()
+        holistica = HolisticDetector()
 
         filenames = self.get_filepaths()
 
@@ -115,7 +118,7 @@ class SplitDataset:
                     # Convert all images to numpy array
                     for fotograma in new_frames:
                         # Process the image
-                        results = holistica.detectar_holistica(fotograma)
+                        results = holistica.detect_holistic(fotograma)
 
                         # Simple verification to see if there is even a hand in the image
                         # if results.left_hand_landmarks is not None or results.right_hand_landmarks is not None:
@@ -137,7 +140,7 @@ class SplitDataset:
                             if save_images:
                                 name_image_iter = f"{count_image}-{signal_name}-({name_image})"
                                 count_image += 1
-                                image_pred = holistica.dibujar_prediccion(fotograma, results)
+                                image_pred = holistica.draw_prediction(fotograma, results)
                                 self.save_image_prediction_draw(
                                     image_pred,
                                     save_path_image_detection_draw,
@@ -171,9 +174,9 @@ class SplitDataset:
                                 ) = holistica.get_unproccesed_coordenates_data_aug(
                                     result=results,
                                     # used_parts = used_parts,
-                                    x_max_rotation=30,
-                                    y_max_rotation=45,
-                                    z_max_rotation=20,
+                                    x_max_rotation=x_max_rotation,
+                                    y_max_rotation=y_max_rotation,
+                                    z_max_rotation=z_max_rotation,
                                     axies_to_rotate=["x", "y", "z"],
                                     cant_rotations_per_axis=cant_rotations_per_axie_data_aug,
                                 )
