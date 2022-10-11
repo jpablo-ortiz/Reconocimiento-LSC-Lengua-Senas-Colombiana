@@ -6,16 +6,19 @@ from glob import glob
 
 import tensorflow as tf
 
-# TODO: Test the use of a external ImageDataGenerator.
-#    - Test with saving the images of the data augmentation on disk.
-#    - Test without saving the images of the data augmentation.
-
 # Different types of datasets pipelines of sign images
-# - SignDataset() -> tf.data.Dataset
+# - SignDataset() ->tf.data.Dataset
 #   - tf.data.Dataset.from_tensor_slices (with direct io)
 #   - tf.data.Dataset.list_files
 # - SignDatasetImageDatasetFromDirectory() -> tf.keras.preprocessing.image_dataset_from_directory
-# - SignDatasetImageDataGenerator() ->tf.keras.preprocessing.image.ImageDataGenerator
+# - SignDatasetImageDataGenerator() =>tf.keras.preprocessing.image.ImageDataGenerator
+
+# ===========================================================
+# PATH CONSTANTS
+# ===========================================================
+
+PATH_RAW_DATA = "../../data/raw/Signs"
+PATH_PROCESSED_DATA = "../../data/processed/Signs"
 
 # ===========================================================
 # Abstract class for sign datasets
@@ -23,9 +26,21 @@ import tensorflow as tf
 
 
 class SignDatasetAbstract(metaclass=ABCMeta):
-    def __init__(self, path='../../data/raw/Signs', img_height=256, img_width=256, batch_size=32,
-                 shuffle=True, random_seed=None, optimizers=True, normalize_images=True, grayscale=False,
-                 use_cache=True, cache_dir=''):
+    def __init__(
+        self,
+        path=PATH_RAW_DATA,
+        img_height=256,
+        img_width=256,
+        batch_size=32,
+        shuffle=True,
+        random_seed=None,
+        optimizers=True,
+        normalize_images=True,
+        grayscale=False,
+        use_cache=True,
+        disable_repeate=False,
+        defined_dataset=None,
+    ):
         self.path = path
         self.img_height = img_height
         self.img_width = img_width
@@ -36,36 +51,30 @@ class SignDatasetAbstract(metaclass=ABCMeta):
         self.normalize_images = normalize_images
         self.grayscale = grayscale
         self.use_cache = use_cache
-        self.cache_dir = cache_dir
+        self.defined_dataset = defined_dataset
+        self.disable_repeate = disable_repeate
 
     def _configure_for_performance(self, dataset: tf.data.Dataset):
-        # dataset.repeat() will repeat the dataset indefinitely to prevent errors when running out of data.
-        # This is why it is VERY IMPORTANT to set the steps_per_epoch parameter of the model.fit() method
-        dataset = dataset.repeat()
-
         # Improve performance by cache and prefetching some batches (to allow batches use batch_size)
         # https://www.tensorflow.org/guide/data_performance
 
-        # There are 3 different cases for cache usage:
-        # 1. cache() -> When the size of the dataset does not exceed the available RAM memory, otherwise...
-        # 2. cache(filename) -> Save the cache to a file on the disk memory. This method fills up a lot
-        #    of disk memory, and it's so slow on the firts epoch, but improve a lot the following epochs.
-        # 3. If the above conditions are not met, don't use cache()
+        # If you use cache, depending on the size of the dataset, you can saturate the RAM memory.
+        # This cause that the system goes slow or freeze, but if you wait the system will recover.
+        # The chache affects the performance of the first epoch, but improves the performance of the
+        # following epochs.
 
         if self.use_cache:  # Cache the dataset to avoid re-reading the files
-            if self.cache_dir != '':
-                dataset = dataset.cache(self.cache_dir)
-            else:
-                dataset = dataset.cache()
+            dataset = dataset.cache()
 
         # Optimize the use of gpu and cpu
         dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
+
         return dataset
 
     def get_recomend_steps_per_epoch(self):
         # Variable to put on model.fit(steps_per_epoch=?)
         if self.steps_per_epoch is None:
-            filenames = glob(self.path + '/*/*.jpg')
+            filenames = glob(self.path + "/*/*.jpg")
             self.steps_per_epoch = math.ceil(len(filenames) / self.batch_size)
         return self.steps_per_epoch
 
@@ -84,12 +93,17 @@ class SignDatasetAbstract(metaclass=ABCMeta):
     def denormalize_image(dataset: tf.data.Dataset):
         def denormalization(image, label):
             return image * 255.0, label
-        return dataset.map(denormalization, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+
+        return dataset.map(denormalization, num_parallel_calls=tf.dat3a.experimental.AUTOTUNE)
 
     def normalize_image(dataset: tf.data.Dataset):
         def normalization(image, label):
             return image / 255.0, label
+
         return dataset.map(normalization, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+
+    def load_dataset(path="../data/processed_tfdataset"):
+        return tf.data.experimental.load(path)
 
 
 # ===========================================================
@@ -98,31 +112,82 @@ class SignDatasetAbstract(metaclass=ABCMeta):
 
 
 class SignDataset(SignDatasetAbstract):
-    def __init__(self, path='../../data/raw/Señas', img_height=256, img_width=256, batch_size=32,
-                 shuffle=True, random_seed=None, optimizers=True, normalize_images=True, grayscale=False,
-                 use_cache=True, cache_dir='', fastest_version=True, resize_images=True):
-        super().__init__(path, img_height, img_width, batch_size, shuffle, random_seed,
-                         optimizers, normalize_images, grayscale, use_cache, cache_dir)
+    def __init__(
+        self,
+        path=PATH_RAW_DATA,
+        img_height=256,
+        img_width=256,
+        batch_size=32,
+        shuffle=True,
+        random_seed=None,
+        optimizers=True,
+        normalize_images=True,
+        grayscale=False,
+        use_cache=True,
+        fastest_version=True,
+        resize_images=True,
+        disable_repeate=False,
+        defined_dataset=None,
+    ):
+        super().__init__(
+            path,
+            img_height,
+            img_width,
+            batch_size,
+            shuffle,
+            random_seed,
+            optimizers,
+            normalize_images,
+            grayscale,
+            use_cache,
+            disable_repeate,
+            defined_dataset,
+        )
 
         self.fastest_version = fastest_version
         self.resize_images = resize_images
 
         self.classes = None
         self.steps_per_epoch = None
+        self.have_dataset = False
 
     def get_dataset(self) -> tf.data.Dataset:
-        dataset = None
+        dataset = self.defined_dataset
 
-        # Get the filename (with path) of each image
-        filenames = glob(self.path + '/*/*.jpg')
-        if self.shuffle:
-            self._shuffle_filenames(filenames)
+        if dataset is None:
+            # Get the filename (with path) of each image
+            filenames = glob(self.path + "/*/*.jpg")
+            # Transform all \\ to / to avoid errors when extract labels
+            filenames = [filename.replace("\\", "/") for filename in filenames]
+            if self.shuffle:
+                self._shuffle_filenames(filenames)
 
-        # Process the dataset generator
-        if self.fastest_version:
-            dataset = self._get_dataset_from_tensor_slices_version(filenames)
+            # Process the dataset generator
+            if self.fastest_version:
+                dataset = self._get_dataset_from_tensor_slices_version(filenames)
+            else:
+                dataset = self._get_dataset_list_files_version(filenames)
         else:
-            dataset = self._get_dataset_list_files_version(filenames)
+            self.have_dataset = True
+
+        # If is defined_dataset apply previous transformations
+        if self.defined_dataset is not None:
+            # Resize image
+            if self.resize_images:
+                dataset = dataset.map(
+                    lambda x, y: (
+                        tf.cast(tf.image.resize(x, [self.img_height, self.img_width]), tf.uint8),
+                        y,
+                    ),
+                    num_parallel_calls=tf.data.experimental.AUTOTUNE,
+                )
+
+            # Apply normalization (Allways at the end)
+            if self.normalize_images and dataset.element_spec[0].dtype != tf.float32:
+                dataset = dataset.map(
+                    lambda x, y: (tf.cast(x, tf.float32) / 255.0, y),
+                    num_parallel_calls=tf.data.experimental.AUTOTUNE,
+                )
 
         if self.optimizers:
             # Perform shuffle, batch, repeat and prefetch
@@ -135,12 +200,13 @@ class SignDataset(SignDatasetAbstract):
         # Get the respective label
         classes = self.get_classes()
         dict_classes = {_class: _label for _label, _class in classes}
-        labels = [dict_classes[filename.split('/')[-2]] for filename in filenames]
+        labels = [dict_classes[filename.split("/")[-2]] for filename in filenames]
 
         # Create a dataset of images (x) and labels (y) (y = a one_hot tensor) (from filenames and labels)
         filenames_dataset = tf.data.Dataset.from_tensor_slices(filenames)
         images_dataset = filenames_dataset.map(
-            self._decode_image, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+            self._decode_image, num_parallel_calls=tf.data.experimental.AUTOTUNE
+        )
         labels_dataset = tf.keras.utils.to_categorical(labels)  # To one hot vector
         labels_dataset = tf.data.Dataset.from_tensor_slices(labels_dataset)
         dataset = tf.data.Dataset.zip((images_dataset, labels_dataset))  # Zip the two datasets
@@ -173,11 +239,15 @@ class SignDataset(SignDatasetAbstract):
         return dataset
 
     def get_classes(self):
+        if self.have_dataset:
+            print(
+                "Advertencia: se ingresó un dataset previamente creado, por lo cual las clases que se obtienen del path pueden no ser las correctas"
+            )
         if self.classes is None:
             # Get the classes from the folders names in the path
             classes = os.listdir(self.path)
             # All folders that begin with '.' are ignored
-            classes = [_class for _class in classes if _class[0] != '.']
+            classes = [_class for _class in classes if _class[0] != "."]
             self.classes = [(_label, _class) for _label, _class in enumerate(classes)]
         return self.classes
 
@@ -193,6 +263,11 @@ class SignDataset(SignDatasetAbstract):
 
         # Configure extra options to improve the performance
         dataset = super()._configure_for_performance(dataset)
+
+        # dataset.repeat() will repeat the dataset indefinitely to prevent errors when running out of data.
+        # This is why it is VERY IMPORTANT to set the steps_per_epoch parameter of the model.fit() method
+        if not self.disable_repeate:
+            dataset = dataset.repeat()
 
         return dataset
 
@@ -210,16 +285,37 @@ class SignDataset(SignDatasetAbstract):
         if self.resize_images:
             image = tf.image.resize(image, [self.img_height, self.img_width])
         if self.normalize_images:
-            image = image / 255.0
+            image = tf.image.per_image_standardization(image)
         return image
 
 
 class SignDatasetImageDatasetFromDirectory(SignDatasetAbstract):
-    def __init__(self, path='../../data/raw/Señas', img_height=256, img_width=256, batch_size=32,
-                 shuffle=True, random_seed=None, optimizers=True, normalize_images=True, grayscale=False,
-                 use_cache=True, cache_dir='', crop_to_aspect_ratio=False):
-        super().__init__(path, img_height, img_width, batch_size, shuffle, random_seed,
-                         optimizers, normalize_images, grayscale, use_cache, cache_dir)
+    def __init__(
+        self,
+        path=PATH_RAW_DATA,
+        img_height=256,
+        img_width=256,
+        batch_size=32,
+        shuffle=True,
+        random_seed=None,
+        optimizers=True,
+        normalize_images=True,
+        grayscale=False,
+        use_cache=True,
+        crop_to_aspect_ratio=False,
+    ):
+        super().__init__(
+            path,
+            img_height,
+            img_width,
+            batch_size,
+            shuffle,
+            random_seed,
+            optimizers,
+            normalize_images,
+            grayscale,
+            use_cache,
+        )
 
         self.crop_to_aspect_ratio = crop_to_aspect_ratio
 
@@ -229,14 +325,14 @@ class SignDatasetImageDatasetFromDirectory(SignDatasetAbstract):
     def get_dataset(self) -> tf.data.Dataset:
         dataset = tf.keras.utils.image_dataset_from_directory(
             self.path,
-            labels='inferred',
-            label_mode='categorical',
-            color_mode='grayscale' if self.grayscale else 'rgb',
+            labels="inferred",
+            label_mode="categorical",
+            color_mode="grayscale" if self.grayscale else "rgb",
             batch_size=self.batch_size if self.optimizers else None,
             image_size=(self.img_height, self.img_width),
             shuffle=self.shuffle,  # reshuffle_each_iteration=False compared with other techniques
             seed=self.random_seed,
-            interpolation='bilinear',
+            interpolation="bilinear",
             crop_to_aspect_ratio=self.crop_to_aspect_ratio,
         )
 
@@ -267,17 +363,45 @@ class SignDatasetImageDatasetFromDirectory(SignDatasetAbstract):
         # Configure extra options to improve the performance
         dataset = super()._configure_for_performance(dataset)
 
+        # dataset.repeat() will repeat the dataset indefinitely to prevent errors when running out of data.
+        # This is why it is VERY IMPORTANT to set the steps_per_epoch parameter of the model.fit() method
+        if not self.disable_repeate:
+            dataset = dataset.repeat()
+
         return dataset
 
 
 class SignDatasetImageDataGenerator(SignDatasetAbstract):
-    def __init__(self, path='../../data/raw/Señas', img_height=256, img_width=256, batch_size=32,
-                 shuffle=True, random_seed=None, optimizers=True, normalize_images=True, grayscale=False,
-                 crop_to_aspect_ratio=False, data_aug_save_dir=None, data_aug_save_prefix='',
-                 use_cache=True, cache_dir='', data_aug_save_format='jpg',
-                 image_data_generator: tf.keras.preprocessing.image.ImageDataGenerator = None):
-        super().__init__(path, img_height, img_width, batch_size, shuffle, random_seed,
-                         optimizers, normalize_images, grayscale, use_cache, cache_dir)
+    def __init__(
+        self,
+        path=PATH_RAW_DATA,
+        img_height=256,
+        img_width=256,
+        batch_size=32,
+        shuffle=True,
+        random_seed=None,
+        optimizers=True,
+        normalize_images=True,
+        grayscale=False,
+        crop_to_aspect_ratio=False,
+        data_aug_save_dir=None,
+        data_aug_save_prefix="",
+        use_cache=True,
+        data_aug_save_format="jpg",
+        image_data_generator: tf.keras.preprocessing.image.ImageDataGenerator = None,
+    ):
+        super().__init__(
+            path,
+            img_height,
+            img_width,
+            batch_size,
+            shuffle,
+            random_seed,
+            optimizers,
+            normalize_images,
+            grayscale,
+            use_cache,
+        )
 
         self.crop_to_aspect_ratio = crop_to_aspect_ratio
         self.data_aug_save_dir = data_aug_save_dir
@@ -295,18 +419,18 @@ class SignDatasetImageDataGenerator(SignDatasetAbstract):
 
     def get_dataset(self) -> tf.data.Dataset:
         if self.normalize_images:
-            self.image_data_generator.rescale = 1./255
+            self.image_data_generator.rescale = 1.0 / 255
 
         dataset = self.image_data_generator.flow_from_directory(
             self.path,
             classes=None,
-            class_mode='categorical',
-            color_mode='grayscale' if self.grayscale else 'rgb',
+            class_mode="categorical",
+            color_mode="grayscale" if self.grayscale else "rgb",
             batch_size=self.batch_size if self.optimizers else None,
             target_size=(self.img_height, self.img_width),
             shuffle=self.shuffle,
             seed=self.random_seed,
-            interpolation='nearest',
+            interpolation="nearest",
             keep_aspect_ratio=self.crop_to_aspect_ratio,
             save_to_dir=self.data_aug_save_dir,
             save_prefix=self.data_aug_save_prefix,
