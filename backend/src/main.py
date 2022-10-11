@@ -2,6 +2,8 @@ import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from routes import user_routes
+
 # -------------------------------------------------
 # -------------- API INICIALIZATION ---------------
 # -------------------------------------------------
@@ -9,6 +11,8 @@ from starlette.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 # ================= Routers and configs =================
+
+app.include_router(user_routes.router)
 
 app.add_middleware(
     CORSMiddleware,
