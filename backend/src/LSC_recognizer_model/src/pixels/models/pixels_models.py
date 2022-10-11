@@ -7,3 +7,4 @@ def get_resnet50_adapted_model(num_classes):
     x = tf.keras.layers.GlobalAveragePooling2D()(x)
     predictions = tf.keras.layers.Dense(num_classes, activation="softmax")(x)
     model = tf.keras.Model(inputs=model.input, outputs=predictions)
+    return model

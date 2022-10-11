@@ -10,7 +10,7 @@ class SignModel:
     def __init__(
         self,
         model,
-        path_to_load_weights: str = '',
+        path_to_load_weights: str = "",
         dataset_train=None,
         dataset_validation=None,
         X_train=None,
@@ -24,12 +24,12 @@ class SignModel:
         self.model = model
 
         # Verifications
-        self.is_loaded_weights = path_to_load_weights != ''
+        self.is_loaded_weights = path_to_load_weights != ""
         self.is_dataset = dataset_train is not None
         self.is_XY = X_train is not None and Y_train is not None
 
         if not self.is_dataset and not self.is_XY and not self.is_loaded_weights:
-            raise Exception("You must provide a dataset_train or X_train and Y_train or path_to_load_weights")
+            raise Exception("Se debe proveer un dataset_train o X_train e Y_train o path_to_load_weights")
 
         if self.is_loaded_weights:
             self.path_to_load_weights = path_to_load_weights
@@ -41,9 +41,7 @@ class SignModel:
                 self.have_validation = True
             else:
                 if X_validation is not None and Y_validation is not None:
-                    raise Exception(
-                        "You must provide a dataset_validation when is provided a dataset_train"
-                    )
+                    raise Exception("Se debe proveer un dataset_validation cuando se provee un dataset_train")
             self.dataset_train = dataset_train
 
         elif self.is_XY:
@@ -54,7 +52,7 @@ class SignModel:
             else:
                 if dataset_validation is not None:
                     raise Exception(
-                        "You must provide a X_validation and Y_validation when is provided a X_train and Y_train"
+                        "Se debe proveer un X_validation e Y_validation cuando se provee un X_train e Y_train"
                     )
             self.X_train = X_train
             self.Y_train = Y_train
@@ -70,10 +68,12 @@ class SignModel:
         verbose: int = 1,
     ):
         if not self.is_dataset and not self.is_XY:
-            raise Exception("You must provide a dataset_train or X_train and Y_train on the constructor (init)")
+            raise Exception("Se debe proveer un dataset_train o X_train e Y_train en el constructor (init)")
 
         if self.is_loaded_weights:
-            print("The model is loaded with weights, the training will be continued on the last best epoch")
+            print(
+                "El modelo se cargo con pesos predeterminados, el entrenamiento continuara en la última mejor epoch"
+            )
 
         self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
@@ -105,7 +105,7 @@ class SignModel:
 
     def save_plot_results(self, X_test, Y_test, path_to_save: str):
         if not self.trained_model:
-            raise Exception("You must train the model before save the plot results")
+            raise Exception("Se debe entrenar el modelo antes de guardar las gráficas de resultados")
 
         if not os.path.exists(f"{path_to_save}/report"):
             os.mkdir(f"{path_to_save}/report")
@@ -131,7 +131,7 @@ class SignModel:
 
             plt.subplot(1, 2, 1)
             plt.ylabel("Loss", fontsize=16)
-            #plt.xlabel("Epoch", fontsize=14)
+            # plt.xlabel("Epoch", fontsize=14)
             plt.plot(history.history["loss"], label="Training Loss")
             plt.plot(history.history["val_loss"], label="Validation Loss")
             # Show a point on the best epoch
@@ -152,7 +152,7 @@ class SignModel:
 
             plt.subplot(1, 2, 2)
             plt.ylabel("Accuracy", fontsize=16)
-            #plt.xlabel("Epoch", fontsize=14)
+            # plt.xlabel("Epoch", fontsize=14)
             plt.plot(history.history["accuracy"], label="Training Accuracy")
             plt.plot(history.history["val_accuracy"], label="Validation Accuracy")
             # Show a point and the value on the best epoch
@@ -171,30 +171,30 @@ class SignModel:
             )
             plt.legend(loc="lower right")
 
-            #plt.show()
+            # plt.show()
             return plt
 
     def get_plot_confusion_matrix(self, X_test, Y_test):
         if not self.trained_model and not self.is_loaded_weights:
-            raise Exception("The model is not trained or loaded with weights")
-        
+            raise Exception("El modelo no ha sido entrenado o ha sido cargado con pesos predeterminados")
+
         ytrue = np.argmax(Y_test, axis=1).tolist()
 
         yhat = self.model.predict(X_test)
         yhat = np.argmax(yhat, axis=1).tolist()
 
         cm = confusion_matrix(ytrue, yhat)
-        plt.figure(figsize=(10,10))
+        plt.figure(figsize=(10, 10))
         sns.heatmap(cm, annot=True, fmt="d")
         plt.title("Confusion matrix")
-        plt.ylabel('True label')
-        plt.xlabel('Predicted label')
+        plt.ylabel("True label")
+        plt.xlabel("Predicted label")
 
         return plt, accuracy_score(ytrue, yhat)
 
-    def get_prediction(self, keypoints, classes: list[tuple[int,str]], all_results: bool = True):
+    def get_prediction(self, keypoints, classes: list[tuple[int, str]], all_results: bool = True):
         if not self.trained_model and not self.is_loaded_weights:
-            raise Exception("The model is not trained or loaded with weights")
+            raise Exception("El modelo no ha sido entrenado o ha sido cargado con pesos predeterminados")
         keypoints = np.expand_dims(keypoints, axis=0)
         results = self.model.predict(keypoints, verbose=0)[0]
         if not all_results:
@@ -203,7 +203,7 @@ class SignModel:
         else:
             all_results: list = []
             for num, prob in enumerate(results):
-                probability = int(prob*100)
+                probability = int(prob * 100)
                 all_results.append((classes[num][1], probability))
 
             # Sort highest probability to lowest

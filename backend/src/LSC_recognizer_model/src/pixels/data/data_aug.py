@@ -53,7 +53,7 @@ class DataAug:
         if dataset is None:
             # Get the filename (with path) of each image
             filenames = glob(self.path + "/*/*.jpg")
-            # Transdorm all \\ to / to avoid errors when extract labels
+            # Transform all \\ to / to avoid errors when extract labels
             filenames = [filename.replace("\\", "/") for filename in filenames]
 
             # Get the respective label
