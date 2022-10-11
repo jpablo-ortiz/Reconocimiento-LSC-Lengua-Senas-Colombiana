@@ -11,7 +11,7 @@ from utils.landmarks.hand_info import CANT_LANDMARKS_HAND, Hand, HandInfo
 from utils.landmarks.pose_info import CANT_OLD_LANDMARKS_POSE, PoseInfo
 
 
-class DetectorHolistica:
+class HolisticDetector:
 
     # =============================================================
     # =================== Principal Function ======================
