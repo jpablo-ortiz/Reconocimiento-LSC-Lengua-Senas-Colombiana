@@ -42,9 +42,19 @@ def train_model(credentials: HTTPAuthorizationCredentials = Security(security)):
             raise HTTPException(status_code=401, detail="Unauthorized")
 
         model_controller = ModelController(model_repository)
+        signal_controller = SignalController(signal_repository)
 
-        # TODO: Decidir si solo se va a a entrenar o si primero se ejecuta generate_dataset y luego se entrena
+        signals_with_unprocessed_images = signal_controller.get_signals_with_unprocessed_images()
+
+        if len(signals_with_unprocessed_images) > 0:
+            # TODO: aqui se vuelve a generar todo, pero lo ideal es que solo
+            # se genere las señas o imagenes que no se hayan procesado.
+            # En la variable signals_with_unprocessed_images se tiene la lista de los
+            # nombres de las señas que tienen imagenes sin procesar.
+            model_controller.generate_dataset()
+
         model_controller.train_model()
+
         return {"message": "Inicio de entrenamiento exitoso"}
     except Exception as error:
         raise HTTPException(
@@ -70,12 +80,8 @@ def get_train_state(credentials: HTTPAuthorizationCredentials = Security(securit
         if not verify_credentials(credentials):
             raise HTTPException(status_code=401, detail="Unauthorized")
 
-        model_controller = ModelController(model_repository)
-        # TODO: Implementar:
-        # Se debe retornar una lista de las nuevas señas que no han estado en un entrenamiento
-        # Si está vacía significa que no se debe volver a entrenar el modelo
-        # Si no está vacía, se debe entrenar el modelo nuevamente con las nuevas señales
-        return model_controller.get_train_state()
+        signal_controller = SignalController(signal_repository)
+        return signal_controller.get_signals_with_unprocessed_images()
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
 
@@ -87,9 +93,9 @@ def save_signal(signal: Signal, credentials: HTTPAuthorizationCredentials = Secu
             raise HTTPException(status_code=401, detail="Unauthorized")
 
         signal_controller = SignalController(signal_repository)
+
         result = signal_controller.create_signal(signal)
-        signal_controller.save_image_on_disk(signal)
-        return {"message": "Signal created successfully", "result": result}
+        return {"message": "La seña se ha guardado exitosamente", "result": result}
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
 
