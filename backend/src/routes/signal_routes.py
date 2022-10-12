@@ -1,12 +1,13 @@
 import json
 
+from controllers.model_controller import ModelController
 from controllers.signal_controller import SignalController
 from fastapi import APIRouter, HTTPException, Security, WebSocket
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from models.coord_signal import CoordSignal
 from models.signal import Signal
-from repositories.signal_repository import (SignalRepositoryNoSQL,
-                                            SignalRepositoryTinyDB)
+from repositories.callback_repository import CallbackRepositoryNoSQL, CallbackRepositoryTinyDB
+from repositories.signal_repository import SignalRepositoryNoSQL, SignalRepositoryTinyDB
 from services.auth_service import AuthService
 
 # -------------------------------------------------
@@ -21,6 +22,9 @@ auth_handler = AuthService()
 # signal_repository = SignalRepositoryNoSQL()
 signal_repository = SignalRepositoryTinyDB()
 
+# model_repository = CallbackRepositoryNoSQL()
+model_repository = CallbackRepositoryTinyDB()
+
 # -------------------------------------------------
 # --------------- SERVICIOS REST ------------------
 # -------------------------------------------------
@@ -29,6 +33,51 @@ signal_repository = SignalRepositoryTinyDB()
 @router.get("/")
 def home():
     return {"message": "Conectado con éxito"}
+
+
+@router.get("/train")
+def train_model(credentials: HTTPAuthorizationCredentials = Security(security)):
+    try:
+        if not verify_credentials(credentials):
+            raise HTTPException(status_code=401, detail="Unauthorized")
+
+        model_controller = ModelController(model_repository)
+
+        # TODO: Decidir si solo se va a a entrenar o si primero se ejecuta generate_dataset y luego se entrena
+        model_controller.train_model()
+        return {"message": "Inicio de entrenamiento exitoso"}
+    except Exception as error:
+        raise HTTPException(
+            status_code=500, detail="Error al iniciar el entrenamiento: " + str(error)
+        ) from error
+
+
+@router.get("/training-info")
+def get_training_info(credentials: HTTPAuthorizationCredentials = Security(security)):
+    try:
+        if not verify_credentials(credentials):
+            raise HTTPException(status_code=401, detail="Unauthorized")
+
+        model_controller = ModelController(model_repository)
+        return model_controller.get_training_info()
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@router.get("/train-state")
+def get_train_state(credentials: HTTPAuthorizationCredentials = Security(security)):
+    try:
+        if not verify_credentials(credentials):
+            raise HTTPException(status_code=401, detail="Unauthorized")
+
+        model_controller = ModelController(model_repository)
+        # TODO: Implementar:
+        # Se debe retornar una lista de las nuevas señas que no han estado en un entrenamiento
+        # Si está vacía significa que no se debe volver a entrenar el modelo
+        # Si no está vacía, se debe entrenar el modelo nuevamente con las nuevas señales
+        return model_controller.get_train_state()
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error)) from error
 
 
 @router.post("/new-signal")
