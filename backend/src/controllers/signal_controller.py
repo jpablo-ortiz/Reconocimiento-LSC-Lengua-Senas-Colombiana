@@ -18,6 +18,9 @@ class SignalController:
     def __init__(self, signal_repository: SignalRepository):
         self.signal_repository = signal_repository
 
+    def save_image_on_mediapipe_numpy_file(self, signal: Signal):
+        raise NotImplementedError
+
     def create_signal(self, signal: Signal):
         # Save signal on database
         return self.signal_repository.create_signal(signal)
@@ -36,9 +39,6 @@ class SignalController:
         for i, photo in enumerate(photos):
             with open(f"{PATH_PREDICTED_IMG}/{signal.name}/{i}.jpg", "wb") as file:
                 file.write(photo)
-
-    def save_image_on_mediapipe_numpy_file(self, signal: Signal):
-        raise NotImplementedError
 
     def predict_signal(self, coord_signal: CoordSignal):
         split_dataset = SplitDataset(path_raw_numpy=PATH_RAW_NUMPY)
