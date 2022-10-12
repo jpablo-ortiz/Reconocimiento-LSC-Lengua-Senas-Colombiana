@@ -8,7 +8,7 @@ from LSC_recognizer_model.src.coordenates.models.coordenates_models import (
 )
 from LSC_recognizer_model.src.utils.sign_model import SignModel
 from models.coord_signal import CoordSignal
-from models.signal import Signal
+from models.signal import Image, RequestSignal, Signal
 from repositories.signal_repository import SignalRepository
 from settings import PATH_CHECKPOINTS_LOAD, PATH_PREDICTED_IMG, PATH_RAW_NUMPY
 from utils.holistic.holistic_detector import HolisticDetector
@@ -21,24 +21,27 @@ class SignalController:
     def save_image_on_mediapipe_numpy_file(self, signal: Signal):
         raise NotImplementedError
 
-    def create_signal(self, signal: Signal):
-        # Save signal on database
-        return self.signal_repository.create_signal(signal)
+    def create_signal(self, signal: RequestSignal):
+        result_signal = self.signal_repository.get_signal_by_name(signal.name, with_images=False)
+        if result_signal is None:
+            new_signal = Signal(
+                name=signal.name,
+                images=[
+                    Image(image=img, name=i, processed_image=False) for i, img in enumerate(signal.images)
+                ],
+                processed_signal=False,
+            )
 
-    def save_image_on_disk(self, signal: Signal):
+            self.signal_repository.create_signal(new_signal)
+        else:
+            self.signal_repository.add_images_to_signal(
+                signal_name=signal.name,
+                images=[
+                    Image(image=img, name=i, processed_image=False) for i, img in enumerate(signal.images)
+                ],
+            )
 
-        # convert list of base64 to list of images
-        photos = [base64.b64decode(photo) for photo in signal.photos]
-
-        # Create folder if not exists
-        folder: str = PATH_PREDICTED_IMG + "/" + signal.name
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-
-        # save images on disk
-        for i, photo in enumerate(photos):
-            with open(f"{PATH_PREDICTED_IMG}/{signal.name}/{i}.jpg", "wb") as file:
-                file.write(photo)
+        return signal.name
 
     def predict_signal(self, coord_signal: CoordSignal):
         split_dataset = SplitDataset(path_raw_numpy=PATH_RAW_NUMPY)
@@ -60,3 +63,7 @@ class SignalController:
         predictions = {prediction[0]: prediction[1] for prediction in predictions}
 
         return predictions
+
+    def get_signals_with_unprocessed_images(self):
+        signals = self.signal_repository.get_signals_with_unprocessed_images()
+        return signals

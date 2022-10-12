@@ -57,8 +57,6 @@ class ModelController:
             (3, lambda image: zoom(image, 0.5)),
         ]
 
-        # Comentar esta celda una vez se haya ejecutado por primera vez
-
         split_dataset = SplitDataset(path_raw_image=PATH_RAW_SIGNS)
         train, test, validation = split_dataset.get_splited_files(
             save_path_numpy=PATH_RAW_NUMPY,
