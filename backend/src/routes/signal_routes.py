@@ -47,14 +47,15 @@ def train_model(credentials: HTTPAuthorizationCredentials = Security(security)):
         signals_with_unprocessed_images = signal_controller.get_signals_with_unprocessed_images()
 
         if len(signals_with_unprocessed_images) > 0:
-            # TODO: aqui se vuelve a generar todo, pero lo ideal es que solo
-            # se genere las señas o imagenes que no se hayan procesado.
-            # En la variable signals_with_unprocessed_images se tiene la lista de los
-            # nombres de las señas que tienen imagenes sin procesar.
-            model_controller.generate_dataset()
+            model_controller.process_images_not_processed()
+    except Exception as error:
+        raise HTTPException(
+            status_code=500,
+            detail="Error al procesar las imágenes que no habían sido procesadas: " + str(error),
+        ) from error
 
+    try:
         model_controller.train_model()
-
         return {"message": "Inicio de entrenamiento exitoso"}
     except Exception as error:
         raise HTTPException(

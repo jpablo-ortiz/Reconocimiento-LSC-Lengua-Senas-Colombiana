@@ -83,6 +83,10 @@ class SignalRepository(metaclass=abc.ABCMeta):
     def get_all_signals(self) -> list[Signal]:
         pass
 
+    @abc.abstractmethod
+    def update_all_signals_to_processed(self) -> bool:
+        pass
+
 
 class SignalRepositoryNoSQL(SignalRepository):
     def __init__(self):
@@ -98,6 +102,9 @@ class SignalRepositoryNoSQL(SignalRepository):
         raise NotImplementedError
 
     def get_all_signals(self) -> list[Signal]:
+        raise NotImplementedError
+
+    def update_all_signals_to_processed(self) -> bool:
         raise NotImplementedError
 
 
@@ -129,3 +136,6 @@ class SignalRepositoryTinyDB(SignalRepository):
 
     def get_all_signals(self) -> list[Signal]:
         return [Signal(**signal) for signal in db_tiny.all()]
+
+    def update_all_signals_to_processed(self) -> bool:
+        return db_tiny.update({"processed_signal": True})

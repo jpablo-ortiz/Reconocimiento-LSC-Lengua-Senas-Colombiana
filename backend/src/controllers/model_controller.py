@@ -1,3 +1,4 @@
+import os
 import random
 
 import cv2
@@ -9,18 +10,26 @@ from LSC_recognizer_model.src.coordenates.models.coordenates_models import (
     get_model_coord_dense_3,
 )
 from LSC_recognizer_model.src.utils.sign_model import SignModel
+from LSC_recognizer_model.src.utils.sign_utils import generate_npy_files_from_image, get_filepaths
 from repositories.callback_repository import CallbackRepository, CallbackRepositoryTinyDB
 from settings import PATH_CHECKPOINTS_SAVE, PATH_RAW_NUMPY, PATH_RAW_SIGNS
+from utils.holistic.holistic_detector import HolisticDetector
+
+from controllers.signal_controller import SignalController
 
 
 class ModelController:
-    def __init__(self, callback_repository: CallbackRepository):
+    def __init__(self, callback_repository: CallbackRepository, signal_controller: SignalController):
         self.callback_repository = callback_repository
+        self.signal_controller = signal_controller
 
     def get_training_info(self, id_training: int):
         return self.callback_repository.get_training_info(id_training)
 
-    def generate_dataset(self):
+    def process_images_not_processed(self):
+        # -----------------------------------------------
+        # Data augmentation Functions to apply to the images
+        # -----------------------------------------------
         def single_aug(image):
             image = cv2.flip(image, 1)
             return image
@@ -57,17 +66,52 @@ class ModelController:
             (3, lambda image: zoom(image, 0.5)),
         ]
 
-        split_dataset = SplitDataset(path_raw_image=PATH_RAW_SIGNS)
-        train, test, validation = split_dataset.get_splited_files(
-            save_path_numpy=PATH_RAW_NUMPY,
-            # save_path_image_detection_draw = PATH_PREDICTED_IMG,
-            image_single_aug=image_single_aug,
-            image_separated_aug=image_separated_aug,
-            cant_rotations_per_axie_data_aug=[2, 2, 2],
-            x_max_rotation=25,
-            y_max_rotation=40,
-            z_max_rotation=20,
-        )
+        # -----------------------------------------------
+        # Process all notprocessed and error images
+        # -----------------------------------------------
+        holistic = HolisticDetector()
+
+        list_of_failed_images = []
+        list_of_error_images = []
+        list_of_correct_images = []
+
+        filenames = get_filepaths(PATH_RAW_SIGNS, "jpg")
+
+        for filename in filenames:
+            # If the image is not processed or failed, process it
+            if "notprocessed" in filename or "error" in filename:
+                list_landmarks_per_new_coord = generate_npy_files_from_image(
+                    filename=filename,
+                    holistic=holistic,
+                    save_path_numpy=PATH_RAW_NUMPY,
+                    # save_path_image_detection_draw = PATH_PREDICTED_IMG,
+                    image_single_aug=image_single_aug,
+                    image_separated_aug=image_separated_aug,
+                    # TODO: When the data augmentation is tested, use cant_rotations_per_axie_data_aug
+                    # cant_rotations_per_axie_data_aug=[2, 2, 2]
+                    x_max_rotation=25,
+                    y_max_rotation=40,
+                    z_max_rotation=20,
+                )
+
+                if len(list_landmarks_per_new_coord) == 0:
+                    list_of_failed_images.append(filename)
+                elif list_landmarks_per_new_coord is None:
+                    list_of_error_images.append(filename)
+                else:
+                    list_of_correct_images.append(filename)
+
+        for correct_image in list_of_correct_images:
+            os.rename(correct_image, correct_image.replace("notprocessed", "processed"))
+            os.rename(correct_image, correct_image.replace("error", "processed"))
+        for failed_image in list_of_failed_images:
+            os.rename(failed_image, failed_image.replace("notprocessed", "failed"))
+            os.rename(failed_image, failed_image.replace("error", "failed"))
+        for error_image in list_of_error_images:
+            os.rename(error_image, error_image.replace("notprocessed", "error"))
+
+        # Before processing the images, we can verify that all signs are processed
+        self.signal_controller.update_all_signals_to_processed()
 
     async def train_model(self):
         # -----------------------------------------------
@@ -75,7 +119,7 @@ class ModelController:
         # -----------------------------------------------
 
         split_dataset = SplitDataset(path_raw_numpy=PATH_RAW_NUMPY)
-        train, test, validation = split_dataset.get_splited_files()
+        train, test, validation, _ = split_dataset.get_splited_files()
 
         # FIX data
         X_train, Y_train = split_dataset.get_only_specific_parts_and_fix(
