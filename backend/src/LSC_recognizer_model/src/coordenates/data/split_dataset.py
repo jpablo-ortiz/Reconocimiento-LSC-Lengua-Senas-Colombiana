@@ -1,15 +1,14 @@
 import math
-import os
 from math import floor
-import tensorflow as tf
-import numpy as np
 
-from utils.holistic.holistic_detector import HolisticDetector
+import numpy as np
+import tensorflow as tf
 from LSC_recognizer_model.src.utils.sign_utils import (
     generate_npy_files_from_image,
     get_classes,
     get_filepaths,
 )
+from utils.holistic.holistic_detector import HolisticDetector
 
 
 class SplitDataset:
@@ -152,7 +151,7 @@ class SplitDataset:
 
     def get_recomend_steps_per_epoch(self, batch_size=32):
         if self.steps_per_epoch is None:
-            filenames = glob(self.path + f"/*/*.{self.extension}")
+            filenames = get_filepaths(self.path, self.extension)
             self.steps_per_epoch = math.ceil(len(filenames) / batch_size)
         return self.steps_per_epoch
 

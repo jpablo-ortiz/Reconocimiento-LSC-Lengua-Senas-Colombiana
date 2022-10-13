@@ -1,13 +1,12 @@
+import os
+from glob import glob
+from unicodedata import normalize
+
 import cv2
 import numpy as np
 
-from glob import glob
-import os
-from unicodedata import normalize
-
 
 def generate_npy_files_from_image(
-    self,
     filename,
     holistic,
     save_path_numpy: str = "",
@@ -129,7 +128,7 @@ def generate_npy_files_from_image(
         return None
 
 
-def save_coordenates(self, coordenates, path, signal_name, name):
+def save_coordenates(coordenates, path, signal_name, name):
     # Create folder if not exists
     folder = path + "/" + signal_name
     if not os.path.exists(folder):
@@ -140,7 +139,7 @@ def save_coordenates(self, coordenates, path, signal_name, name):
         np.save(f, coordenates)
 
 
-def save_image_prediction_draw(self, image_pred, path, signal_name, name):
+def save_image_prediction_draw(image_pred, path, signal_name, name):
     # Create folder if not exists
     folder = path + "/" + signal_name
     if not os.path.exists(folder):
