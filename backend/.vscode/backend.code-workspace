@@ -1,14 +1,31 @@
 {
     "folders": [
         {
-            //"path": "../src/Compartidos/proyecto"
             "path": ".."
         }
     ],
     "launch": {
         "configurations": [
             {
-                "name": "Python: FastAPI",
+                "name": "Python: FastAPI GUNICORN",
+                "type": "python",
+                "request": "launch",
+                "module": "gunicorn",
+                "cwd": "${workspaceFolder}/src",
+                "args": [
+                    "main:app",
+                    "--workers",
+                    "3", /* 2 X Núcleos + 1 */
+                    "--worker-class",
+                    "uvicorn.workers.UvicornWorker",
+                    "--bind",
+                    "127.0.0.1:8080",
+                    "--timeout",
+                    "86400" /* 24 * 60 * 60 */
+                ],
+            },
+            {
+                "name": "Python: FastAPI UVICORN",
                 "type": "python",
                 "request": "launch",
                 "module": "uvicorn",
@@ -18,22 +35,24 @@
                     "--reload",
                     "--port",
                     "8080",
+                    "--workers",
+                    "41" /* 2 X Núcleos + 1 */
                 ],
             }
         ]
     },
     "settings": {
-        // Python
+        /* Python */
         "python.defaultInterpreterPath": "./env/Scripts/python.exe",
         "python.analysis.typeCheckingMode": "off",
-        // Formatter and Linter
+        /* Formatter and Linter */
         "python.formatting.provider": "black",
         "editor.formatOnSave": true,
         "python.formatting.blackArgs": [
             "--line-length",
             "110"
         ],
-        // Designs on vscode
+        /* Designs on vscode */
         "explorer.excludeGitIgnore": true,
         "workbench.editorAssociations": {
             "*.svg": "svgPreviewer.customEditor",
@@ -45,7 +64,7 @@
             "requirements.docker.txt": "Python-misc",
             "requirements.env.txt": "Python-misc",
         },
-        // GIT
+        /* GIT */
         "conventionalCommits.scopes": [
             "front",
             "back",
@@ -53,9 +72,15 @@
             "database",
             "docker"
         ],
-        // Others
+        /* Others */
         "editor.inlineSuggest.enabled": true,
         "editor.renderWhitespace": "none",
+        /* Test */
+        "python.testing.pytestArgs": [
+            "test"
+        ],
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestEnabled": true
     },
     "extensions": {
         "recommendations": [
