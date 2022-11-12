@@ -26,7 +26,7 @@ export class ChartResultsComponent {
 			for (let j = 0; j < result.length; j++) {
 				adapterList.push({
 					label: result[j].signalName,
-					value: result[j].probability,
+					value: result[j].sum_prob,
 				});
 			}
 

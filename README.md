@@ -1,6 +1,16 @@
 # Reconocimiento LSC Lengua Señas Colombiana
 
-... TODO
+Sistema de reconocimiento de Lengua Señas Colombiana (LSC) basado en el modelo de aprendizaje profundo de redes neuronales para la detección y la clasificación de gestos o señas de las comunidades con discapacidad auditiva.
+
+Este sistema se compone de dos partes:
+
+1. Backend: se encarga de la detección y clasificación de gestos o señas de las comunidades con discapacidad auditiva y de gestionar la interacción del usuario con los conceptos técnicos como los modelos, el entrenamiento del modelo, el registro de nuevas señas, el versionado, y la predicción de las señas. 
+   
+   Esta es orquestada con el framework de Python [FastAPI](https://fastapi.tiangolo.com/) para la creación de una API RESTful; y con la base de datos NoSQL ([TinyDB](https://tinydb.readthedocs.io/en/latest/)), y las carpetas de almacenamiento de los modelos y las señas.
+
+2. Frontend: se encarga de la interacción del usuario no técnico con el sistema, ya sea para realizar la traducción de señas a texto y/o voz, o para registrar nuevas señas en el sistema. Esta es orquestada con el framework de [Angular](https://angular.io/) para la creación de una aplicación web.
+
+El proyecto tiene por objetivo ser un aplicativo totalmente funcional y utilizable en casos cotidianos de interacción con comunidades que hagan uso de LSC, pero el proyecto al ser un entregable de trabajo de tesis universitaria se encuentra en **estado alpha** y para lograr el obetivo de sistema productivo estable se requiere la [contribución](#contribuciones) de parte de la comunidad de desarrolladores para la implementación de nuevas funcionalidades y la corrección de errores, usando estandares de calidad y buenas prácticas de desarrollo. [Más Información](#contribuciones).
 
 ---
 
@@ -17,7 +27,9 @@
 
 # Background
 
-... TODO
+El presente Proyecto tiene como objetivo brindarle a la comunidad con discapacidad auditiva y a las diferentes partes que quieran continuar con el desarrollo del sistema que se pretende realizar, una implementación capaz de dar interpretación de las señas presentes en la LSC, sin embargo, es necesario complementar la base de datos del léxico de esta lengua, por lo cual, a los diferentes actores como personas e instituciones interesadas, se les da la posibilidad de ayudar a aumentar la extensibilidad de las señas de forma intuitiva llegando a tener la innovación de nuevos proyectos en los que se desarrolle o se de a lugar la fomentación de la inclusión social de la población sorda en nuestra sociedad. 
+
+El proyecto fundamentalmente necesita de volúmenes de datos, en este caso de imágenes, videos para la previa obtención de información como son las diferentes señas de la LSC que nos permita entrenar los datos no estructurados mediante la utilización de las técnicas de aprendizaje de máquina como lo pueden ser los modelos de entrenamiento, principalmente las redes neuronales. De este modo, nuestro sistema podrá clasificar y mostrar de manera clara el significado de la seña realizada y que con el tiempo se pueda ofrecer un sistema eficiente y aplicable en diversos aspectos sociales y estatales donde se logre reducir esa brecha de la comunicación entre las personas con discapacidad auditiva y las que no.  
 
 # Configuración del entorno
 ## Pasos previos
@@ -140,7 +152,7 @@ Para linux - bash ejecutar en la terminal:
 
 # Uso
 
-... TODO
+~~ PRÓXIMAMENTE ~~
 
 # Changelog
 
