@@ -1,5 +1,6 @@
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi import APIRouter, HTTPException, Security
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
 from controllers.user_controller import (
     ACCOUNT_LOGIN_PASSWORD_ERROR,
     ACCOUNT_LOGIN_USER_ERROR,
@@ -8,8 +9,8 @@ from controllers.user_controller import (
     UserController,
 )
 from models.user import UserLogin, UserModel
-from repositories.user_repository import UserRepositoryNoSQL, UserRepositoryTinyDB
-from services.auth_service import AuthService
+from repositories.user_repository import UserRepositoryTinyDB
+from utils.auth.auth_service import AuthService
 
 # -------------------------------------------------
 # ------------- Inicialzando el router ------------
@@ -17,15 +18,19 @@ from services.auth_service import AuthService
 
 router = APIRouter()
 
-# user_repository = UserRepositoryNoSQL()
-user_repository = UserRepositoryTinyDB()
-
 security = HTTPBearer()
 auth_handler = AuthService()
+
+user_repository = UserRepositoryTinyDB()
 
 # -------------------------------------------------
 # --------------- SERVICIOS REST ------------------
 # -------------------------------------------------
+
+
+@router.get("/")
+def home():
+    return {"message": "Conectado con éxito"}
 
 
 @router.post("/signup")
@@ -47,9 +52,9 @@ def login(user_details: UserLogin):
     result = user_controller.login(user_details.username, user_details.password)
 
     if result == ACCOUNT_LOGIN_USER_ERROR:
-        raise HTTPException(status_code=401, detail=ACCOUNT_LOGIN_USER_ERROR)
+        raise HTTPException(status_code=409, detail=ACCOUNT_LOGIN_USER_ERROR)
     if result == ACCOUNT_LOGIN_PASSWORD_ERROR:
-        raise HTTPException(status_code=401, detail=ACCOUNT_LOGIN_PASSWORD_ERROR)
+        raise HTTPException(status_code=409, detail=ACCOUNT_LOGIN_PASSWORD_ERROR)
 
     return result
 
