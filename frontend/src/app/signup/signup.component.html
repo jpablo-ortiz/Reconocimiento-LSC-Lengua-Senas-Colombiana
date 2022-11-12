@@ -1,0 +1,68 @@
+<div class="background">
+    <div class="divFormFix">
+
+        <h2>Registro</h2>
+
+        <form [formGroup]="formFields" class="formFix">
+            <div class="form-group">
+                <label>Nombre:</label>
+                <input [class.is-invalid]="Name.invalid && Name.touched" type="text" class="form-control"
+                    formControlName="name" required />
+
+                <div *ngIf="(Name.invalid && Name.touched) || Name.dirty">
+                    <div class="alert alert-danger my-3" *ngIf="Name.errors?.required">
+                        <small>El nombre es requerido</small>
+                    </div>
+                    <div class="alert alert-danger my-3" *ngIf="Name.errors?.minlength">
+                        <small>El nombre debe tener al menos 3 caracteres</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Email:</label>
+                <input [class.is-invalid]="Email.invalid && Email.touched" type="email" class="form-control"
+                    formControlName="email" required />
+
+                <div *ngIf="(Email.invalid && Email.touched) || Email.dirty">
+                    <div class="alert alert-danger my-3" *ngIf="Email.errors?.required">
+                        <small>El email es requerido</small>
+                    </div>
+                    <div class="alert alert-danger my-3" *ngIf="Email.errors?.pattern">
+                        <small>El email no es válido</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Password:</label>
+                <input [class.is-invalid]="Password.invalid && Password.touched" type="password" class="form-control"
+                    formControlName="password" required />
+
+                <div *ngIf="(Password.invalid && Password.touched) || Password.dirty">
+                    <div class="alert alert-danger my-3" *ngIf="Password.errors?.required">
+                        <small>La contraseña es requerida</small>
+                    </div>
+                    <div class="alert alert-danger my-3" *ngIf="Password.errors?.minlength">
+                        <small>La contraseña debe tener al menos 6 caracteres</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group input-radio-container">
+                <div class="input-radio">
+                    <input type="radio" formControlName="role" value="admin" [(ngModel)]="roleA" required />
+                    <label>Administrador</label>
+                </div>
+                <div class="input-radio">
+                    <input type="radio" formControlName="role" value="contributor" [(ngModel)]="roleC" required />
+                    <label>Contribuidor</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary buttonFix" [disabled]="formFields.invalid" (click)="signup()">
+                Registrarse
+            </button>
+        </form>
+    </div>
+</div>

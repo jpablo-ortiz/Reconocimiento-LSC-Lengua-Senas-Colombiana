@@ -1,0 +1,151 @@
+<main class="padding">
+    <h1 class="subtitle"> Manual de uso</h1>
+
+    <section class="bigmarg">
+
+        <div>
+            <div>
+
+                <div>
+                    <h3>Función Tradicional</h3>
+                    <p>
+                        Puedes usar el sistema de dos formas, la primera es la forma tradicional, donde puedes dirigirte
+                        a la
+                        sección de Traducción.
+                        En el se te habilitara la cámara, para que puedas ejecutar la seña, recuerda que la cámara debe
+                        estar
+                        enfocada en tu mano, para que sirva correctamente su funcionalidad.
+                    </p>
+
+                    <div class="way">
+
+                        <div class="correctWay">
+                            <h4>Paso correcto <i class="fa-sharp fa-solid fa-thumbs-up"></i></h4>
+                            <div class="imageStep1">
+                                <img src="../../assets/images/traductor.png" alt="Correcto">
+                            </div>
+                        </div>
+
+                        <div class="incorrectWay">
+                            <h4>Paso incorrecto <i class="fa-sharp fa-solid fa-thumbs-down"></i></h4>
+                            <div class="imageStep1">
+                                <img src="../../assets/images/traductorIncorrecto.png" alt="Correcto">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <p>
+                    Una vez que hayas ejecutado la seña, se te mostrara la traducción de la misma, en la parte superior
+                    derecha de la pantalla. Recuerda que podrás silenciar la seña dando click al checkbox, tambien
+                    puedes detallar la precisión de las señas que has ejecutado presionando el botón "Ver estadística".
+                </p>
+                <div>
+                    <h3> Demás funciones</h3>
+                    <p>
+                        Puedes usar nuestros servicios avanzados accediendo al apartado de Registro y eventualmente
+                        Login.
+                    </p>
+                </div>
+
+            </div>
+
+            <div>
+                <h3>Funciones Avanzadas</h3>
+                <p> Una vez ya te hayas registrado y logueado podrás ayudarnos a mejorar el sistema de interpretación
+                    del
+                    Lenguaje de Señas Colombiana.</p>
+                <div>
+                    <h3> Capturar nueva seña </h3>
+                    <p> Se te habilitará la cámara para que puedas subir una nueva seña en el Sistema, para ello debes
+                        oprimir el
+                        botón "Tomar Foto", recuerda debes tomar almenos 10 imagenes.
+                        por otro lado, debes escribir el nombre de la seña y darle en "Procesar nombre".
+                    </p>
+                    <p>Podrás ver las fotos que has tomado por el momento y eliminar la foto que desees, recuerda que al
+                        oprimir
+                        el boton "Guardar" se corroborará que todo este en orden y si oprimes "Eliminar todo" se
+                        eliminaran todas
+                        las fotos que tengas guardadas en el momento. </p>
+                </div>
+                <div>
+                    <h3>Entrenamiento del modelo</h3>
+                    <p>
+                        Puedes entrenar el modelo para que pueda reconocer las nuevas señas añadidas en el apartado de
+                        captura de
+                        nuevas señas, para ello debes dirigirte a la sección de Entrenamiento,
+                        en la cual se te habilitará el boton "Entrenar" dependiendo de si en el momento otro usuario ya
+                        habia
+                        ejecutado un entrenamiento , si se te habilita el boton se te mostrará las señas que faltan por
+                        entrenar en
+                        el sistema,
+                        por ultimo podrás ver el tiempo que falta para que termine el entrenamiento, donde te llevaremos
+                        una vez
+                        termiando eso al apartado de Traducción para que puedas probar las nuevas señas del Sistema.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section>
+        <div>
+            <h2 class="subtitle"> Grupo de Investigación</h2>
+            <div class="principalCard box">
+                <div *ngFor="let integrante of team" class="card">
+                    <!-- Must be 2 lines -->
+                    <div class="socialNetworks">
+
+
+                        <h3 style="text-align: center; margin-top: 10px;">{{integrante.names}} {{integrante.lastnames}}
+                        </h3>
+                        <p>
+                            <img src="{{integrante.profile}}" alt="Perfil Integrante" class="profile">
+                        </p>
+                        <p>
+                            <a href={{integrante.linkedin}}> <i class="fa-brands fa-linkedin-in fa-3x"></i> </a>
+                        </p>
+                        <p>
+                            <a href={{integrante.github}}> <i class="fa-brands fa-github fa-3x"></i> </a>
+                        </p>
+                        <p>
+                            <a href={{integrante.email}}> <i class="fa-solid fa-envelope fa-3x"></i> </a>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bigmarg">
+        <h2 class="subtitle">Sumate a la creación de un mundo mejor !!</h2>
+        <p>Creemos que es posible mejorar la calidad de vida de las personas es por esto que con gusto habilitamos
+            nuestro
+            servicio para que todos seamos
+            participes de una sociedad mas inclusiva y equitativa, Es por esto que muy pronto estaremos habilitando el
+            servicio de traducción de señas Dinámicas,
+            ampliando el Sistema al siguiente nivel.
+        </p>
+    </section>
+
+    <!-- Put the Github reposiutory and google drive storage -->
+    <section>
+        <h2 class="subtitle">Recursos</h2>
+        <div>
+            <h3 style="text-align: center; margin-bottom: 15px;">
+                <a href="https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana">
+                    <i class="fa-brands fa-github fa-2x"></i>
+                </a>
+                <a style="margin-right: 50px;"></a>
+                <a href="https://drive.google.com/drive/folders/18TRO6CHB6kv8vr2wTyYm7eZys-pUTV17?usp=sharing">
+                    <i class="fa-brands fa-google-drive fa-2x"></i>
+                </a>
+            </h3>
+        </div>
+    </section>
+
+    <section></section>
+
+</main>

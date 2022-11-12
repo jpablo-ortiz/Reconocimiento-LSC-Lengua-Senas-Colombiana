@@ -1,1 +1,120 @@
 /* You can add global styles to this file, and also import other style files */
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	list-style: none;
+	text-decoration: none;
+}
+
+body {
+	background-color: #e9e9e9;
+}
+
+h1,
+h2,
+h3,
+p {
+	color: #001633;
+}
+
+.card {
+	background-color: #769eb9;
+	margin-top: 30px;
+	box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.4);
+}
+
+.card h1,
+.card h2,
+.card label,
+.card p {
+	color: #d9b310;
+	color: #001633;
+}
+
+/* when button is disabled */
+#button_train {
+	background-color: #54606e;
+}
+
+/* when button is enabled */
+#button_train:enabled {
+	background-color: #001633;
+	color: #fff;
+}
+
+.center {
+	text-align: center;
+}
+
+.padding {
+	padding: 20px;
+}
+
+/* Used on login and register pages */
+
+.background {
+	background-image: url(../src/assets/images/registroImage.jpg);
+	background-size: cover;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.divFormFix {
+	background-color: rgba(240, 255, 255, 0.6);
+	border-radius: 10px;
+	padding: 20px;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
+.formFix {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	padding: 15px;
+}
+
+.buttonFix {
+	background-color: #1c3879;
+	color: rgb(255, 244, 244);
+	transition: 1s all;
+	border: 2px solid #1c3879;
+	border-radius: 5px;
+	width: 200px;
+	margin-top: 5px;
+}
+
+.buttonFix:hover {
+	background-color: #607eaa;
+	color: rgb(255, 244, 244);
+	transform: scale(1.05);
+}
+
+.input-radio-container {
+	display: flex;
+	flex-direction: row;
+	gap: 15px;
+}
+
+.input-radio-container div label {
+	margin-left: 5px;
+}
+
+@media screen and (min-width: 768px) {
+	.divFormFix {
+		width: 30%;
+		height: auto;
+	}
+}

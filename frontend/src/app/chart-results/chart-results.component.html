@@ -1,0 +1,16 @@
+<div *ngIf="hasData == true ; else elseTemplate">
+    <h1> Resultados obtenidos</h1>
+    <div class="chartData">
+        <fusioncharts [chartConfig]=chartConfig [dataSource]=dataSource>
+        </fusioncharts>
+    </div>
+
+</div>
+
+<ng-template #elseTemplate>
+    <br>
+    <h1> No hay resultados</h1>
+    <div class="alignContentEmpty">
+        <p>Se le redireccionará a la pestaña de traducción para recopilar información y habilitar las estadísticas</p>
+    </div>
+</ng-template>
