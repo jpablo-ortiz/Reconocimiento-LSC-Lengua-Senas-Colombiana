@@ -7,42 +7,80 @@
     "launch": {
         "configurations": [
             {
-                "name": "Python: FastAPI",
+                "name": "Python: FastAPI GUNICORN",
+                "type": "python",
+                "request": "launch",
+                "module": "gunicorn",
+                "cwd": "${workspaceFolder}/src",
+                "args": [
+                    "main:app",
+                    "--workers",
+                    "3", /* 2 X Núcleos + 1 */
+                    "--worker-class",
+                    "uvicorn.workers.UvicornWorker",
+                    "--bind",
+                    "127.0.0.1:8080",
+                    "--timeout",
+                    "86400" /* 24 * 60 * 60 */
+                ],
+            },
+            {
+                "name": "Python: FastAPI UVICORN",
                 "type": "python",
                 "request": "launch",
                 "module": "uvicorn",
                 "cwd": "${workspaceFolder}/src",
                 "args": [
-                    "interfaz:app",
+                    "main:app",
                     "--reload",
                     "--port",
-                    "8000",
+                    "8080",
+                    "--workers",
+                    "41" /* 2 X Núcleos + 1 */
                 ],
-                "jinja": true,
-                "justMyCode": true,
             }
         ]
     },
     "settings": {
-        "python.defaultInterpreterPath": "./env/bin/python",
+        /* Python */
+        "python.defaultInterpreterPath": "./env/Scripts/python.exe",
+        "python.analysis.typeCheckingMode": "off",
+        /* Formatter and Linter */
+        "python.formatting.provider": "black",
+        "editor.formatOnSave": true,
+        "python.formatting.blackArgs": [
+            "--line-length",
+            "110"
+        ],
+        /* Designs on vscode */
+        "explorer.excludeGitIgnore": true,
         "workbench.editorAssociations": {
-            "*.svg": "hediet.vscode-drawio-text"
+            "*.svg": "svgPreviewer.customEditor",
+            "*.ipynb": "jupyter-notebook",
+            "*.md": "vscode.markdown.preview.editor",
+            "*.pdf": "pdf.preview"
         },
-        "explorer.excludeGitIgnore": false,
         "material-icon-theme.files.associations": {
             "requirements.docker.txt": "Python-misc",
             "requirements.env.txt": "Python-misc",
         },
+        /* GIT */
         "conventionalCommits.scopes": [
             "front",
             "back",
-            "neuronal-network",
+            "nn",
             "database",
             "docker"
         ],
+        /* Others */
         "editor.inlineSuggest.enabled": true,
         "editor.renderWhitespace": "none",
-        "editor.bracketPairColorization.enabled": true,
+        /* Test */
+        "python.testing.pytestArgs": [
+            "test"
+        ],
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestEnabled": true
     },
     "extensions": {
         "recommendations": [

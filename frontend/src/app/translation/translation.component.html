@@ -1,0 +1,61 @@
+<main [hidden]="initializated" class="loading-screen">
+    <video class="input_video" autoplay="true"></video>
+    <canvas class="input_canvas"></canvas>
+    <h2 class="charging-text">
+        Las traducciones aguardan por ti.
+        <br>
+        Cargando...
+    </h2>
+    <div class="spinner-border" role="status">
+        <span class="sr-only"></span>
+    </div>
+</main>
+
+<main class="" [hidden]="!initializated">
+    <div class="row mx-3">
+
+        <div class="col-md-8">
+            <div class="card cardHeight">
+                <div class="card-header">
+                    <h2 class="center card-title center">Cámara</h2>
+                </div>
+                <div class="card-body">
+                    <canvas class="output_canvas" width="640px" height="480px"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!--Column-->
+        <div class="container col-md-4">
+
+            <div class="card cardHeighColumn blue">
+                <div class="card-header">
+                    <h2 class="card-title center">Traducción</h2>
+                </div>
+                <div class="card-body d-flex justify-content-center">
+                    <div>
+                        <br>
+                        <h2 class="prediction" [innerHTML]="signalPredicted"></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card cardHeighColumn">
+                <div class="card-header">
+                    <h2 class="centrar card-title center">Configuraciones</h2>
+                </div>
+                <div class="card-body">
+                    <div class="configBox">
+                        <label for="sound">
+                            <h4>Activar audio
+                                <input type="checkbox" name="sound" class="sound">
+                            </h4>
+                        </label>
+                        <a (click)="playAudio(signalPredicted)" class="btn btn-primary">
+                            <i class="fa-solid fa-microphone fa-2x"></i> Reproducir audio 1 vez </a>
+                        <a id="buttonChartResults" class="btn btn-primary">Ver estadística</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

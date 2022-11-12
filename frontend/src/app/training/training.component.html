@@ -1,0 +1,148 @@
+<div class="container center-countdown">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Modelo actual</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <h4>Nombre del modelo</h4>
+                        </th>
+                        <th>
+                            <h4>Precisión</h4>
+                        </th>
+                        <th>
+                            <h4>Pérdida</h4>
+                        </th>
+                        <th>
+                            <h4>Épocas</h4>
+                        </th>
+                        <th>
+                            <h4>Señas Entrenadas</h4>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <h6>{{actualModel.name}}</h6>
+                        </td>
+                        <td>
+                            <h6>{{actualModel.val_accuracy | percent:'1.0-2'}}</h6>
+                        </td>
+                        <td>
+                            <h6>{{actualModel.val_loss | number:'1.0-3'}}</h6>
+                        </td>
+                        <td>
+                            <h6>{{actualModel.epoch}}</h6>
+                        </td>
+                        <td>
+                            <select class="form-control">
+                                <option style="text-align: center;"> ---- Abrir ---- </option>
+                                <option *ngFor="let sign of alistSignsActualModel" [ngValue]="sign">{{sign}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Entrenamiento del modelo</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="nombre">Cantidad de épocas</label>
+                        <input type="number" class="form-control" id="epocas" placeholder="Cantidad de épocas"
+                            [(ngModel)]="epochs">
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    <button id="button_train" class="btn">Entrenar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" *ngIf="processingSigns">
+        <div class="card-header">
+            <h2 class="card-title">Entrenamiento Actual</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 countdown">
+                    <h4>Preprocesando señas para iniciar el entrenamiento. Por favor espere...</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" *ngIf="viewCountdown">
+        <div class="card-header">
+            <h2 class="card-title">Entrenamiento Actual</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <table class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th>
+                                <h5>Época</h5>
+                            </th>
+                            <th>
+                                <h5>Precisión</h5>
+                            </th>
+                            <th>
+                                <h5>Precisión (Val)</h5>
+                            </th>
+                            <th>
+                                <h5>Pérdida</h5>
+                            </th>
+                            <th>
+                                <h5>Pérdida (Val)</h5>
+                            </th>
+                            <th>
+                                <h5>Hora inicio</h5>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <h6>{{trainingInfo.epoch}}</h6>
+                            </td>
+                            <td>
+                                <h6>{{trainingInfo.accuracy | percent:'1.0-2'}}</h6>
+                            </td>
+                            <td>
+                                <h6>{{trainingInfo.val_accuracy | percent:'1.0-2'}}</h6>
+                            </td>
+                            <td>
+                                <h6>{{trainingInfo.loss | number:'1.0-3'}}</h6>
+                            </td>
+                            <td>
+                                <h6>{{trainingInfo.val_loss | number:'1.0-3'}}</h6>
+                            </td>
+                            <td>
+                                <h6>{{trainingInfo.begin_time}}</h6>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-12 countdown">
+                    <h1>{{countdown}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

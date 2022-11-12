@@ -20,7 +20,27 @@
 ... TODO
 
 # Configuración del entorno
-## Aclaraciones
+## Pasos previos
+1. Crear archivo .env en la carpeta backend con la siguiente plantilla:
+```
+# ----------------- Variables -------------------
+
+PYTHONUNBUFFERED = 1
+DB_URL = "mongodb://mongo-db/NombreDB"
+PATH_DB = "./resources"
+SECRET = "SECRET_STRING_TO_ENCODE_TOKEN"
+
+# --------------------- PATHS --------------------
+
+PATH_PREDICTED_IMG = "./LSC_recognizer_model/data/interim/Signs"
+
+PATH_RAW_SIGNS = "./LSC_recognizer_model/data/raw/Signs"
+PATH_RAW_NUMPY = "./LSC_recognizer_model/data/processed/Numpy"
+
+PATH_CHECKPOINTS_LOAD = "./LSC_recognizer_model/models/modelo-principal"
+PATH_CHECKPOINTS_SAVE = "./LSC_recognizer_model/models/modelo-prueba"
+```
+## Aclaraciones entorno de ejecución
 1. Siempre ejecutar los comandos indicados desde la raíz del proyecto.
 2. Para el backend existen dos sistemas para la compilación del código:
     - Docker - Image Tensorflow:
@@ -76,7 +96,7 @@ Para windows - powershell ejecutar en la terminal:
 ./backend/scripts/crear_env_con_requirements_env_txt.ps1
 
 # Con parametro (python 3.7)
-./backend/scripts/crear_env_con_requirements_env_txt.ps1 -pv 3.7
+./backend/scripts/crear_env_con_requirements_env_txt.ps1 -pyver 3.7
 ```
 
 Para linux - bash ejecutar en la terminal:

@@ -1,62 +1,89 @@
 # Recomendación: Cuando se inicie el proyecto dejar una versión y no el lastest
 
 # ---------------------------- Images ----------------------------
-# Tensorflow with GPU and Jupyter: tensorflow/tensorflow:latest-gpu-jupyter
 # Tensorflow with only GPU: tensorflow/tensorflow:latest-gpu
-# Tensorflow with CPU and Jupyter: tensorflow/tensorflow:latest-jupyter
 # Tensorflow with only CPU: tensorflow/tensorflow:latest
 # ----------------------------------------------------------------
 
-# ============== Tensorflow with GPU and Jupyter ==============
+# # ================== Tensorflow with only GPU =================
+# 
+# FROM tensorflow/tensorflow:latest-gpu as GPUTF
+# 
+# COPY ./requirements.docker.txt .
+# RUN pip install --no-cache-dir -r requirements.docker.txt
+#
+# # To solve the problem with the libGL.so.1
+# RUN apt-get update
+# RUN apt-get install ffmpeg libsm6 libxext6  -y
+# 
+# WORKDIR /src
+# 
+# # ---- Run Server ----
+# # Workers: 2 X Núcleos + 1
+# # Timeout: 24h * 60m * 60s
+# CMD ["gunicorn", "main:app", "--workers", "3", "--worker-class", "uvicorn.workers.UvicornWorker", "--threads", "2", "--bind", "0.0.0.0:8080", "--timeout", "86400"]
+# 
+# # ================== Tensorflow with only CPU =================
+# 
+# FROM tensorflow/tensorflow:latest as CPUTF
+# 
+# COPY ./requirements.docker.txt .
+# RUN pip install --no-cache-dir -r requirements.docker.txt
+# 
+# # To solve the problem with the libGL.so.1
+# RUN apt-get update
+# RUN apt-get install ffmpeg libsm6 libxext6  -y
+# 
+# WORKDIR /src
+# 
+# # ---- Run Server ----
+# # Workers: 2 X Núcleos + 1
+# # Timeout: 24h * 60m * 60s
+# CMD ["gunicorn", "main:app", "--workers", "3", "--worker-class", "uvicorn.workers.UvicornWorker", "--threads", "2", "--bind", "0.0.0.0:8080", "--timeout", "86400"]
+# 
+# # ================== Python production with GPU =================
+# 
+# FROM nvidia/cuda:10.1-cudnn7-runtime as GPU
+# 
+# RUN apt update && \
+#     apt install --no-install-recommends -y build-essential software-properties-common && \
+#     add-apt-repository -y ppa:deadsnakes/ppa && \
+#     apt install --no-install-recommends -y python3.10 python3-pip python3-setuptools python3-distutils && \
+#     apt clean && rm -rf /var/lib/apt/lists/*
+# 
+# RUN apt-get update
+# RUN apt-get install ffmpeg libsm6 libxext6  -y
+# 
+# COPY ./requirements.docker.txt .
+# RUN python3.10 -m pip install --upgrade pip && \
+#     python3.10 -m pip install --no-cache-dir -r requirements.docker.txt
+# 
+# WORKDIR /src
+# 
+# # ---- Run Server ----
+# # Workers: 2 X Núcleos + 1
+# # - Núcleos: nproc --all
+# # Timeout: 24h * 60m * 60s
+# CMD ["gunicorn", "main:app", "--workers", "3", "--worker-class", "uvicorn.workers.UvicornWorker", "--threads", "2", "--bind", "0.0.0.0:8080", "--timeout", "86400"]
+# 
+#  ================== Python production with CPU =================
 
-FROM tensorflow/tensorflow:latest-gpu-jupyter as GPU-Jupyter
+FROM python:3.10.6-slim as CPU
+
+RUN apt update && \
+    apt install --no-install-recommends -y build-essential gcc && \
+    apt clean && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update
+RUN apt-get install ffmpeg libsm6 libxext6  -y
 
 COPY ./requirements.docker.txt .
-RUN pip install --no-cache-dir -r requirements.docker.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.docker.txt
 
-#COPY ./Sign-Language/requirements_gpu.txt .
-#RUN pip install --no-cache-dir -r requirements_gpu.txt
+WORKDIR /src
 
-#RUN apt-get update
-#RUN apt install -y libgl1-mesa-glx
-
-# ================== Tensorflow with only GPU =================
-
-FROM tensorflow/tensorflow:latest-gpu as GPU
-
-COPY ./requirements.docker.txt .
-RUN pip install --no-cache-dir -r requirements.docker.txt
-
-#COPY ./Sign-Language/requirements_gpu.txt .
-#RUN pip install --no-cache-dir -r requirements_gpu.txt
-
-#RUN apt-get update
-#RUN apt install -y libgl1-mesa-glx
-
-# ============== Tensorflow with CPU and Jupyter ==============
-
-FROM tensorflow/tensorflow:latest-jupyter as CPU-Jupyter
-
-COPY ./requirements.docker.txt .
-RUN pip install --no-cache-dir -r requirements.docker.txt
-
-#COPY ./Sign-Language/requirements_cpu.txt .
-#RUN pip install --no-cache-dir -r requirements_cpu.txt
-
-#RUN apt-get update
-#RUN apt install -y libgl1-mesa-glx
-
-# ================== Tensorflow with only CPU =================
-
-FROM tensorflow/tensorflow:latest as CPU
-
-COPY ./requirements.docker.txt .
-RUN pip install --no-cache-dir -r requirements.docker.txt
-
-#COPY ./Sign-Language/requirements_cpu.txt .
-#RUN pip install --no-cache-dir -r requirements_cpu.txt
-
-#RUN apt-get update
-#RUN apt install -y libgl1-mesa-glx
-
-# =============================================================
+# ---- Run Server ----
+# Workers: 2 X Núcleos + 1
+# Timeout: 24h * 60m * 60s
+CMD ["gunicorn", "main:app", "--workers", "3", "--worker-class", "uvicorn.workers.UvicornWorker", "--threads", "2", "--bind", "0.0.0.0:8080", "--timeout", "86400"]

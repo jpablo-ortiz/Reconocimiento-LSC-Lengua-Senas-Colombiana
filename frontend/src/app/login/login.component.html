@@ -1,0 +1,42 @@
+<div class="background">
+    <div class="divFormFix">
+
+        <h2>Iniciar sesión</h2>
+
+        <form [formGroup]="formFields" class="formFix">
+            <div class="form-group">
+                <label>Email:</label>
+                <input [class.is-invalid]="Email.invalid && Email.touched" type="email" class="form-control"
+                    formControlName="email" required />
+
+                <div *ngIf="(Email.invalid && Email.touched) || Email.dirty">
+                    <div class="alert alert-danger my-3" *ngIf="Email.errors?.required">
+                        <small>El email es requerido</small>
+                    </div>
+                    <div clasPs="alert alert-danger my-3" *ngIf="Email.errors?.pattern">
+                        <small>El email no es válido</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Password:</label>
+                <input [class.is-invalid]="Password.invalid && Password.touched" type="password" class="form-control"
+                    formControlName="password" required />
+
+                <div *ngIf="(Password.invalid && Password.touched) || Password.dirty">
+                    <div class="alert alert-danger my-3" *ngIf="Password.errors?.required">
+                        <small>La contraseña es requerida</small>
+                    </div>
+                    <div class="alert alert-danger my-3" *ngIf="Password.errors?.minlength">
+                        <small>La contraseña debe tener al menos 6 caracteres</small>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary buttonFix" [disabled]="formFields.invalid" (click)="login()">
+                Iniciar sesión
+            </button>
+        </form>
+    </div>
+</div>

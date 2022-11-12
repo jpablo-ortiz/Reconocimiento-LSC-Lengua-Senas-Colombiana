@@ -1,0 +1,144 @@
+{
+    "users": {
+        "1": {
+            "username": "admin@admin.com",
+            "password": "$2b$12$5jeah76S/rLO9TdIdcGSveA.e1/48FcEkfYtrHkkjaDQuOENbm7xC",
+            "role": "admin",
+            "name": "Admin123"
+        }
+    },
+    "signals": {
+        "1": {
+            "name": "Alcalde",
+            "images": null,
+            "processed_signal": false
+        },
+        "2": {
+            "name": "Amor",
+            "images": null,
+            "processed_signal": false
+        },
+        "3": {
+            "name": "Balon",
+            "images": null,
+            "processed_signal": false
+        },
+        "4": {
+            "name": "Bien",
+            "images": null,
+            "processed_signal": false
+        },
+        "5": {
+            "name": "Botella",
+            "images": null,
+            "processed_signal": false
+        },
+        "6": {
+            "name": "Cama",
+            "images": null,
+            "processed_signal": false
+        },
+        "7": {
+            "name": "Casa",
+            "images": null,
+            "processed_signal": false
+        },
+        "8": {
+            "name": "Celular",
+            "images": null,
+            "processed_signal": false
+        },
+        "9": {
+            "name": "E - Enero",
+            "images": null,
+            "processed_signal": false
+        },
+        "10": {
+            "name": "F - Febrero",
+            "images": null,
+            "processed_signal": false
+        },
+        "11": {
+            "name": "Hospital",
+            "images": null,
+            "processed_signal": false
+        },
+        "12": {
+            "name": "Instituto",
+            "images": null,
+            "processed_signal": false
+        },
+        "13": {
+            "name": "Lampara",
+            "images": null,
+            "processed_signal": false
+        },
+        "14": {
+            "name": "Mal",
+            "images": null,
+            "processed_signal": false
+        },
+        "15": {
+            "name": "Noviembre",
+            "images": null,
+            "processed_signal": false
+        },
+        "16": {
+            "name": "O - Octubre",
+            "images": null,
+            "processed_signal": false
+        },
+        "17": {
+            "name": "Rezar",
+            "images": null,
+            "processed_signal": false
+        },
+        "18": {
+            "name": "Sabado",
+            "images": null,
+            "processed_signal": false
+        },
+        "19": {
+            "name": "Telefono",
+            "images": null,
+            "processed_signal": false
+        }
+    },
+    "models": {
+        "1": {
+            "id": 1,
+            "name": "1-modelo-principal",
+            "loss": 0.316,
+            "val_loss": 0.316,
+            "accuracy": 0.932,
+            "val_accuracy": 0.932,
+            "mean_time_execution": 0.6396115562799787,
+            "epoch": 1000,
+            "cant_epochs": 1000,
+            "training_state": 3,
+            "begin_time": "{TinyDate}:2022-10-21T02:18:09.589691",
+            "end_time": "{TinyDate}:2022-10-21T02:20:15.966698",
+            "trained_signals": {
+                "0": "Alcalde",
+                "1": "Amor",
+                "2": "Balon",
+                "3": "Bien",
+                "4": "Botella",
+                "5": "Cama",
+                "6": "Casa",
+                "7": "Celular",
+                "8": "E - Enero",
+                "9": "F - Febrero",
+                "10": "Hospital",
+                "11": "Instituto",
+                "12": "Lampara",
+                "13": "Mal",
+                "14": "Noviembre",
+                "15": "O - Octubre",
+                "16": "Rezar",
+                "17": "Sabado",
+                "18": "Telefono"
+            }
+        }
+    }
+}

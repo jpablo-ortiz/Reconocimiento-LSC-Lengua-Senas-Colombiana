@@ -1,0 +1,69 @@
+<div class="container">
+
+    <form [formGroup]="formFields" class="formulario-login-form">
+        <div class="card">
+
+            <div class="card-header">
+                <h1 class="card-title text-center">Nueva Seña</h1>
+            </div>
+            <div class="card-body">
+
+                <div class="form-group">
+                    <input [class.is-invalid]="Name.invalid" type="text" class="form-control"
+                        placeholder="Digíte el nombre de la nueva seña" formControlName="name" required />
+
+                    <div *ngIf="(Name.invalid && Name.touched) || Name.dirty">
+                        <div class="alert alert-danger my-3" *ngIf="Name.errors?.required">
+                            <small>El nombre es requerido</small>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="video-container canvas-video-container" *ngIf="!error">
+                    <video [class.show]="!isCaptured" [class.hide]="isCaptured" #video id="video" [width]="WIDTH"
+                        [height]="HEIGHT" autoplay></video>
+                    <canvas [class.show]="isCaptured" [class.hide]="!isCaptured" #canvas id="canvas" [width]="WIDTH"
+                        [height]="HEIGHT"></canvas>
+                </div>
+
+                <div class="snap-container">
+                    <button class="btn btn-primary" *ngIf="!isCaptured" (click)="capture()">Tomar Foto</button>
+                    <button class="btn btn-danger" *ngIf="isCaptured" (click)="removeCurrent()">Volver a captura de
+                        fotos</button>
+
+                    <div *ngIf="error" class="text-danger mt-4">
+                        {{ error }}.Refresque la página para volver a tomar fotos
+                        <div class="mt-5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="lista-sena" class="card">
+            <div class="card-header">
+                <h2 class="card-title text-center">Lista de imágenes capturadas</h2>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li *ngFor="let src of captures; let idx = index" (click)="setPhoto(idx)">
+                        <div class="photoGrouping">
+                            <div (click)='deletePhoto(idx)'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                                </svg>
+                            </div>
+                            <img [src]="src" height="50" />
+                        </div>
+                    </li>
+                </ul>
+                <div class="buttonGrouping">
+                    <button class="btn btn-primary" (click)="process()" [disabled]="formFields.invalid">Guardar</button>
+                    <button class="btn btn-danger" (click)="deleteAll()">Eliminar todo</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
