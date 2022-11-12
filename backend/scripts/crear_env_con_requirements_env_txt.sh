@@ -23,30 +23,28 @@ create_virtualenv() {
     # Warning: The python version entered must be installed in the system
     (
         if [ -z "$pythvers" ]; then
-            (virtualenv ./env -p python"$pythvers" || python -m virtualenv ./env -p python"$pythvers" || python3 -m virtualenv ./env -p python"$pythvers")
+            (virtualenv ./backend/env -p python"$pythvers" || python -m virtualenv ./backend/env -p python"$pythvers" || python3 -m virtualenv ./backend/env -p python"$pythvers")
         else
-            (virtualenv ./env || python -m virtualenv ./env || python3 -m virtualenv ./env)
+            (virtualenv ./backend/env || python -m virtualenv ./backend/env || python3 -m virtualenv ./backend/env)
         fi
     )
 }
 
 # Function to install the requirements of requirements.env.txt
 install_requirements() {
-    (pip install -r ./requirements.env.txt || pip3 install -r ./requirements.env.txt || python -m pip install -r ./requirements.env.txt || python3 -m pip install -r ./requirements.env.txt)
+    (pip install -r ./backend/requirements.env.txt || pip3 install -r ./backend/requirements.env.txt || python -m pip install -r ./backend/requirements.env.txt || python3 -m pip install -r ./backend/requirements.env.txt)
 }
 
-# Change to the backend folder
-cd ./backend &&
-    # Install virtualenv
-    install_virtualenv &&
+# Install virtualenv
+install_virtualenv &&
     # Create a new virtual environment
     # Warning: The python version entered must be installed in the system
     create_virtualenv &&
     # Activate the virtual environment
-    . ./env/bin/activate &&
+    . ./backend/env/bin/activate &&
     # Update pip
     update_pip &&
     # Install the dependencies from the requirements.env.txt file
     install_requirements &&
     # Change "Scripts/python.exe" to "bin/python" in the .vscode/backend.code-workspace file (vscode config)
-    echo "$cambio_env" >./.vscode/backend.code-workspace
+    echo "$cambio_env" > ./backend/.vscode/backend.code-workspace

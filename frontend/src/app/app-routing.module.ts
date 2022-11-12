@@ -16,6 +16,8 @@ const routes: Routes = [
 	{ path: 'training', component: TrainingComponent },
 	{ path: 'translation', component: TranslationComponent },
 	{ path: 'chart-results', component: ChartResultsComponent },
+	{ path: '', redirectTo: '/home', pathMatch: 'full' },
+	{ path: '**', redirectTo: '/home', pathMatch: 'full' }
 ];
 
 @NgModule({
