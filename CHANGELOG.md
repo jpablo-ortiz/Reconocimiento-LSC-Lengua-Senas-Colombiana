@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana/compare/v1.2.0...v1.2.1) (2022-11-12)
+
+
+### Bug Fixes
+
+* :ambulance: arreglo routing, config server y scripts ([610ed58](https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana/commit/610ed584870168d4f72f2b85ed9d7e3f94e7f4f1))
+
 ## [1.2.0](https://github.com/jpablo-ortiz/Reconocimiento-LSC-Lengua-Senas-Colombiana/compare/v1.1.0...v1.2.0) (2022-11-12)
 
 
