@@ -98,7 +98,7 @@ class PoseInfo(LandmarkInfo):
             raise TypeError("los resultados deben ser NormalizedLandmarkList (Mediapipe) o CoordSignal")
 
         if landmarks is None:
-            landmarks = [Coords.empty()] * int(CANT_OLD_LANDMARKS_POSE / 4)
+            landmarks = [Coords.empty()] * int(CANT_LANDMARKS_POSE / 4)
         elif landmarks is not None and isinstance(results, Type):
             landmarks = landmarks.landmark
 

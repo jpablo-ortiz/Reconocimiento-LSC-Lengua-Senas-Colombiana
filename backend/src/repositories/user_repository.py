@@ -1,9 +1,9 @@
 import abc
 
 from tinydb import Query, where
+
 from models.user import UserModel
-from settings import user_table as db
-from settings import user_table_tinydb as db_tiny
+from settings import users_table as db_tiny
 
 
 class UserRepository(metaclass=abc.ABCMeta):
@@ -14,17 +14,6 @@ class UserRepository(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_by_username(self, username):
         pass
-
-
-class UserRepositoryNoSQL(UserRepository):
-    def __init__(self):
-        pass
-
-    def create_user(self, user: UserModel):
-        raise NotImplementedError
-
-    def get_by_username(self, username):
-        raise NotImplementedError
 
 
 class UserRepositoryTinyDB(UserRepository):

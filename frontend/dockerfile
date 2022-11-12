@@ -1,16 +1,43 @@
-# Primera Etapa
-FROM node:18.7.0-alpine3.15
+# ======================= DEV DOCKERFILE =======================
+#
+#FROM node:18.7.0-alpine3.15
+#
+#RUN mkdir -p /app
+#WORKDIR /app
+#
+#ENV PATH /app/node_modules/.bin:$PATH
+#
+#COPY package*json .
+#COPY . .
+#
+#RUN npm install
+#RUN npm install -g @angular/cli
+#
+#CMD ng serve --host 0.0.0.0
+#
+# ======================= PROD DOCKERFILE =======================
 
-RUN mkdir -p /app
-WORKDIR /app
+## --------- STAGE 1: Build ---------
 
-ENV PATH /app/node_modules/.bin:$PATH
-
-COPY package*json .
-
+FROM node:18.7.0-alpine3.15 AS build
+# Create a virtual directory inside the docker image
+WORKDIR /dist/src/app
+# Copy files to virtual directory
+COPY package.json package-lock.json ./
+# Run command in virtual directory
+RUN npm cache clean --force
+# Copy files from local machine to virtual directory in docker image
 COPY . .
-
 RUN npm install
-RUN npm install -g @angular/cli
+RUN npm run build --prod
 
-CMD ng serve --host 0.0.0.0
+## --------- STAGE 2: Run ---------
+
+FROM nginx:latest AS ngi
+# Copying compiled code and nginx config to different folder
+# NOTE: This path may change according to your project's output folder 
+COPY --from=build /dist/src/app/dist/sistema-lsc /usr/share/nginx/html
+COPY /nginx.conf  /etc/nginx/conf.d/default.conf
+# Exposing a port, here it means that inside the container 
+# the app will be using Port 80 while running
+EXPOSE 80

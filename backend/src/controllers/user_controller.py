@@ -1,6 +1,6 @@
 from models.user import UserModel
 from repositories.user_repository import UserRepository
-from services.auth_service import AuthService
+from utils.auth.auth_service import AuthService
 
 ACCOUNT_SIGNUP_CREATED = "Usuario creado Correctamente"
 
@@ -24,6 +24,7 @@ class UserController:
             hashed_password = self.auth_handler.encode_password(user.password)
             user.password = hashed_password
             self.user_repository.create_user(user)
+
             return ACCOUNT_SIGNUP_CREATED
         except Exception as error:
             print(error)
@@ -37,4 +38,4 @@ class UserController:
             return ACCOUNT_LOGIN_PASSWORD_ERROR
 
         access_token = self.auth_handler.encode_token(user.username)
-        return {"access_token": access_token, "rol": user.rol, "name": user.name}
+        return {"access_token": access_token, "role": user.role, "name": user.name}

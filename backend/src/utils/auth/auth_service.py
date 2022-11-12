@@ -3,6 +3,7 @@ from datetime import timedelta
 
 import jwt  # used for encoding and decoding jwt tokens
 from fastapi import HTTPException  # used to handle error handling
+from fastapi import Request
 from passlib.context import CryptContext
 
 from settings import SECRET  # used for hashing the password
@@ -12,6 +13,13 @@ class AuthService:
     hasher = CryptContext(schemes=["bcrypt"])
     secret = SECRET
 
+    def verify_credentials(self, req: Request):
+        credentials = req.headers["Authorization"].split(" ")[1]
+        if self.decode_token(credentials):
+            return True
+        else:
+            return False
+
     def encode_password(self, password):
         return self.hasher.hash(password)
 
@@ -20,7 +28,7 @@ class AuthService:
 
     def encode_token(self, username):
         payload = {
-            "exp": datetime.utcnow() + timedelta(days=0, hours=4, minutes=0),
+            "exp": datetime.utcnow() + timedelta(days=0, hours=5, minutes=0),
             "iat": datetime.utcnow(),
             "scope": "access_token",
             "sub": username,
