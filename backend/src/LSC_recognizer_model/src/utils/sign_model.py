@@ -89,12 +89,13 @@ class SignModel:
             y=self.Y_train if self.is_XY else None,
             validation_data=val,
             epochs=epochs,
-            steps_per_epoch=steps_per_epoch,
+            #steps_per_epoch=steps_per_epoch,
             callbacks=callbacks,
             use_multiprocessing=False,
             class_weight=None,
             workers=1,
             verbose=verbose,
+
         )
 
         self.trained_model = True
