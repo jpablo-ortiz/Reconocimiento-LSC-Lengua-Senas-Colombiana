@@ -21,17 +21,17 @@ function install_pipenv {
 function create_virtualenv {
     # Warning: The python version entered must be installed in the system
     if ($PSBoundParameters.ContainsKey('pyver')) {
-            (virtualenv ./env -p python"$pythvers" || python -m virtualenv ./env -p python"$pythvers" || python3 -m virtualenv ./env -p python"$pythvers")
+            (virtualenv ./backend/env -p python"$pythvers" || python -m virtualenv ./backend/env -p python"$pythvers" || python3 -m virtualenv ./backend/env -p python"$pythvers")
     }
     else {
-            (virtualenv ./env || python -m virtualenv ./env || python3 -m virtualenv ./env)
+            (virtualenv ./backend/env || python -m virtualenv ./backend/env || python3 -m virtualenv ./backend/env)
         
     }
 }
 
 # Function to install the requirements of requirements.env.txt
 function install_requirements {
-    (pip install -r ./requirements.env.txt || pip3 install -r ./requirements.env.txt || python -m pip install -r ./requirements.env.txt || python3 -m pip install -r ./requirements.env.txt)
+    (pip install -r ./backend/requirements.env.txt || pip3 install -r ./backend/requirements.env.txt || python -m pip install -r ./backend/requirements.env.txt || python3 -m pip install -r ./backend/requirements.env.txt)
 }
 
 # Function to change "bin/python" to "Scripts/python.exe" in the .vscode/backend.code-workspace file (vscode config)
@@ -41,8 +41,6 @@ function change_python_path {
     [IO.File]::WriteAllText("./backend/.vscode/backend.code-workspace", $content)
 }
 
-# Change to the backend directory
-Set-Location ./backend
 Try {
     # Install pipenv
     install_pipenv
@@ -50,11 +48,12 @@ Try {
     # Warning: The python version entered must be installed in the system
     create_virtualenv
     # Activate virtual environment
-    ./env/Scripts/activate
+    ./backend/env/Scripts/activate
     # Update pip
     update_pip  
     # Install the dependencies from the requirements.env.txt file
     install_requirements
+    # Return to the root directory
     # Change vscode config
     change_python_path
     # Show Success Message
@@ -63,7 +62,4 @@ Try {
 Catch {
     Write-Host "Error" -ForegroundColor Red
     Write-Host $_.Exception.Message
-}
-Finally {
-    Set-Location ..
 }
