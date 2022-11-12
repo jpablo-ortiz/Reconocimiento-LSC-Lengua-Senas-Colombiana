@@ -75,7 +75,7 @@ class SignDatasetAbstract(metaclass=ABCMeta):
         # Variable to put on model.fit(steps_per_epoch=?)
         if self.steps_per_epoch is None:
             filenames = glob(self.path + "/*/*.jpg")
-            self.steps_per_epoch = math.ceil(len(filenames) / self.batch_size)
+            self.steps_per_epoch = math.floor(len(filenames) / self.batch_size)
         return self.steps_per_epoch
 
     # -----------------------------------------------------------
