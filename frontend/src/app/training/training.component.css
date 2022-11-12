@@ -1,0 +1,18 @@
+.countdown {
+	/* Center the timer */
+	text-align: center;
+	font-size: 3rem;
+	font-weight: 300;
+	margin: 0;
+	padding: 0;
+	line-height: 1;
+}
+
+@media screen and (min-width: 1000px) {
+	.center-countdown {
+		top: 50%;
+		left: 50%;
+		position: absolute;
+		transform: translate(-50%, -50%);
+	}
+}
