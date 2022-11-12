@@ -1,68 +1,40 @@
-version: '3.8'
+version: "3.8"
 
 services:
+    # Pasos antes del build
+    # 1. Descomentar solo el target que se va a utilizar.
+    # 2. Si se usa una imagen CPU comentar deploy y devices con anidados.
 
-  # Pasos antes del build
-  # 1. Descomentar solo el target que se va a utilizar.
-  # 2. Si se usa una imagen CPU comentar deploy con anidados.
+    backend:
+        container_name: backend-tesis
+        build:
+            context: ./backend
+            target: CPU
+            #target: GPU
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./backend/src:/src
+        env_file:
+            - ./backend/.env
+        stdin_open: true # docker run -i
+        tty: true # docker run -t
+        #devices:
+        #  - /dev/bus/usb:/dev/bus/usb
+        #  - /dev/video0:/dev/video0
+        #deploy:
+        #    resources:
+        #        reservations:
+        #            devices:
+        #                - capabilities: [ gpu ]
 
-  backend:
-    container_name: backend-tesis
-    build:
-      context: ./backend
-      target: GPU
-      #target: CPU
-      #target: GPU-Jupyter
-      #target: CPU-Jupyter
-    ports:
-      - "8888:8888"
-    volumes:
-      - ./backend/src:/src
-    env_file:
-      - ./.env/globals.env
-    stdin_open: true # docker run -i
-    tty: true # docker run -t\
-    #devices:
-    #  - /dev/bus/usb:/dev/bus/usb
-    #  - /dev/video0:/dev/video0
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities: [ gpu ]
-
-  frontend:
-    container_name: frontend-tesis
-    build:
-      context: ./frontend
-    ports:
-      - 4200:4200
-      - 49153:49153
-      - 9876:9876
-      - 49154:49154
-    volumes:
-     - ./frontend:/app
-     - /app/node_modules #Ignorar el directorio node_modules para evitar errores
-
-  mongodb:
-    container_name: mongodb-tesis
-    image: mongo:5.0.9
-    restart: always
-    ports:
-      - 27017:27017
-    volumes:
-      - ./.dbdata:/data/db
-    env_file:
-      - ./.env/mongodb.env
-
-  mongo-express:
-    # Mongo-Express es una herramienta gráfica de administración de clientes web MongoDB.
-    container_name: mongo-express-tesis
-    image: mongo-express:0.54.0
-    restart: always
-    depends_on:
-      - mongodb
-    ports:
-      - 8081:8081
-    env_file:
-      - ./.env/mongo-express.env
+    frontend:
+        container_name: frontend-tesis
+        build:
+            context: ./frontend
+        ports:
+            - 80:80
+            - 4200:4200
+        volumes:
+            - ./frontend:/app
+            - /app/node_modules #Ignorar el directorio node_modules para evitar errores
