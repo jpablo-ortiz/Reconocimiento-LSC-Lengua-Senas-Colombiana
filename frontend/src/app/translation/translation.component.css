@@ -1,3 +1,46 @@
+.output_canvas {
+	background-color: black;
+}
+
+.fullCard {
+	height: 100%;
+	width: 100%;
+}
+
+.halfCard {
+	height: 50%;
+	width: 100%;
+	margin-top: 20px;
+}
+
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0px;
+	height: 91vh;
+	padding: 20px;
+}
+
+.row > div[class*="col-"] {
+	display: flex;
+}
+
+.col-sm-7 {
+	margin: 0px;
+	padding: 0px;
+}
+
+.col-sm-5 {
+	margin: 0px;
+	padding: 0px;
+}
+
+.col {
+	height: 100%;
+	width: 100%;
+	padding-left: 30px;
+}
+
 .input_video {
 	border: 2px solid rgb(46, 43, 43);
 }
@@ -66,12 +109,11 @@
 }
 
 .blue {
-
 	background-color: #3c6497;
 }
 
 .prediction {
-	font-weight: bold; 
+	font-weight: bold;
 	text-align: center;
 }
 
@@ -121,5 +163,22 @@
 		width: 100px;
 		height: 100px;
 		margin-top: -80px;
+	}
+}
+
+@media screen and (max-width: 575px) {
+	.col {
+		padding: 0px;
+	}
+	.row {
+		height: auto;
+	}
+	.col-sm-4 {
+		margin-top: 20px;
+	}
+	.halfCard {
+		height: auto;
+		width: 100%;
+		margin-top: 20px;
 	}
 }

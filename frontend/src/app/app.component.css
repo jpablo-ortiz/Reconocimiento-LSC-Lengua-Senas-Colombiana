@@ -8,10 +8,6 @@
 	background-color: #001633;
 }
 
-.logo {
-	width: 90%;
-}
-
 ul {
 	display: flex;
 	justify-content: space-between;
@@ -37,8 +33,6 @@ button {
 	color: aliceblue;
 }
 
-@media screen and (min-width: 1100px) {
-	.logo {
-		width: 70%;
-	}
+.logo {
+	height: 60px;
 }
