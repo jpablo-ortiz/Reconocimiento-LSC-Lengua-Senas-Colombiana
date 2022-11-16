@@ -7,12 +7,3 @@
 	padding: 0;
 	line-height: 1;
 }
-
-@media screen and (min-width: 1000px) {
-	.center-countdown {
-		top: 50%;
-		left: 50%;
-		position: absolute;
-		transform: translate(-50%, -50%);
-	}
-}

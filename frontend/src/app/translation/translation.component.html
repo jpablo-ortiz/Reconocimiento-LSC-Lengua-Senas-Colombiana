@@ -11,11 +11,10 @@
     </div>
 </main>
 
-<main class="" [hidden]="!initializated">
-    <div class="row mx-3">
-
-        <div class="col-md-8">
-            <div class="card cardHeight">
+<main [hidden]="!initializated">
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="card my-auto fullCard">
                 <div class="card-header">
                     <h2 class="center card-title center">Cámara</h2>
                 </div>
@@ -24,38 +23,37 @@
                 </div>
             </div>
         </div>
-
-        <!--Column-->
-        <div class="container col-md-4">
-
-            <div class="card cardHeighColumn blue">
-                <div class="card-header">
-                    <h2 class="card-title center">Traducción</h2>
-                </div>
-                <div class="card-body d-flex justify-content-center">
-                    <div>
-                        <br>
-                        <h2 class="prediction" [innerHTML]="signalPredicted"></h2>
+        <div class="col-sm-5">
+            <div class="col">
+                <div class="card my-auto halfCard blue">
+                    <div class="card-header">
+                        <h2 class="card-title center">Traducción</h2>
+                    </div>
+                    <div class="card-body d-flex justify-content-center">
+                        <div>
+                            <br>
+                            <h2 class="prediction" [innerHTML]="signalPredicted"></h2>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card cardHeighColumn">
-                <div class="card-header">
-                    <h2 class="centrar card-title center">Configuraciones</h2>
-                </div>
-                <div class="card-body">
-                    <div class="configBox">
-                        <label for="sound">
-                            <h4>Activar audio
-                                <input type="checkbox" name="sound" class="sound">
-                            </h4>
-                        </label>
-                        <a (click)="playAudio(signalPredicted)" class="btn btn-primary">
-                            <i class="fa-solid fa-microphone fa-2x"></i> Reproducir audio 1 vez </a>
-                        <a id="buttonChartResults" class="btn btn-primary">Ver estadística</a>
+                <div class="card my-auto halfCard">
+                    <div class="card-header">
+                        <h2 class="centrar card-title center">Configuraciones</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="configBox">
+                            <label for="sound">
+                                <h4>Activar audio
+                                    <input type="checkbox" name="sound" class="sound">
+                                </h4>
+                            </label>
+                            <a (click)="playAudio(signalPredicted)" class="btn btn-primary">
+                                <i class="fa-solid fa-microphone fa-2x"></i> Reproducir audio 1 vez </a>
+                            <a id="buttonChartResults" class="btn btn-primary">Ver estadística</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</main>
+</main>    
